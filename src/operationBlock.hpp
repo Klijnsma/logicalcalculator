@@ -8,21 +8,21 @@
 #define IMPLICATION 3
 
 class operationBlock {
-    void* variables = malloc(sizeof(char) * 2);
+    char* variables = new char[2];
 public:
     operationBlock(char variable1, int operation_p, char variable2) {
-        *(char*)variables = variable1;
-        *((char*)variables + sizeof(char)) = variable2;
+        *variables = variable1;
+        *(variables + sizeof(char)) = variable2;
 
         operation = operation_p;
     }
 
     ~operationBlock() {
-        free(variables);
+        delete[] variables;
     }
 
     char operator[](int index) {
-        return ((char*)variables)[index];
+        return variables[index];
     }
 
     int operation;
