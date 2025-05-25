@@ -1,28 +1,28 @@
 #pragma once
 
-#include "operationBlock.hpp"
+#include "truthFunction.hpp"
 
-class conjunction : public operationBlock {
+class conjunction : public truthFunction {
 public:
-    using operationBlock::operationBlock;
+    using truthFunction::truthFunction;
 
     bool calculate(bool value1, bool value2) {
         return value1 && value2;
     }
 };
 
-class disjunction : public operationBlock {
+class disjunction : public truthFunction {
 public:
-    using operationBlock::operationBlock;
+    using truthFunction::truthFunction;
 
     bool calculate(bool value1, bool value2) {
         return value1 || value2;
     }
 };
 
-class implication : public operationBlock {
+class materialImplication : public truthFunction {
 public:
-    using operationBlock::operationBlock;
+    using truthFunction::truthFunction;
 
     bool calculate(bool value1, bool value2) {
         return !(!value1 && value2);

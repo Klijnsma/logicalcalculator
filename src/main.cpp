@@ -2,7 +2,7 @@
 // #include "operationBlock.hpp"
 
 int main() {
-    operationBlock premise1({implication(conjunction('p', 'r'), 'q')});
+    truthFunction premise1({materialImplication(conjunction('p', 'r'), 'q')});
 
     return 0;
 }
