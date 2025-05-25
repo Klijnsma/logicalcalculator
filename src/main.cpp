@@ -1,7 +1,8 @@
-#include "premise.hpp"
+#include "logicalOperations.hpp"
+// #include "operationBlock.hpp"
 
 int main() {
-    premise premise1({operationBlock('p', 'q')});
+    operationBlock premise1({implication(conjunction('p', 'r'), 'q')});
 
     return 0;
 }
