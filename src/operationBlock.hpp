@@ -8,7 +8,7 @@ class operationBlock {
 public:
 
     /*
-    Constructors for the possible combinations item types:
+    Constructors for the possible combinations item type:
         - (char, char),
         - (char, operationBlock),
         - (operationBlock, char),
@@ -24,8 +24,8 @@ public:
             s_allVariables.push_back(p_item2);
         }
 
-        *variables[0] = p_item1;
-        *variables[1] = p_item2;
+        items.push_back(p_item1);
+        items.push_back(p_item2);
     }
     operationBlock(char p_item1, operationBlock p_item2) {
         // Add variable to s_allVariables if not in there yet.
@@ -33,8 +33,8 @@ public:
             s_allVariables.push_back(p_item1);
         }
 
-        *variables[0] = p_item1;
-        *variables[1] = p_item2;
+        items.push_back(p_item1);
+        items.push_back(p_item2);
     }
     operationBlock(operationBlock p_item1, char p_item2) {
         // Add variable to s_allVariables if not in there yet.
@@ -42,18 +42,18 @@ public:
             s_allVariables.push_back(p_item2);
         }
 
-        *variables[0] = p_item1;
-        *variables[1] = p_item2;
+        items.push_back(p_item1);
+        items.push_back(p_item2);
     }
     operationBlock(operationBlock p_item1, operationBlock p_item2) {
-        *variables[0] = p_item1;
-        *variables[1] = p_item2;
+        items.push_back(p_item1);
+        items.push_back(p_item2);
     }
 
-    auto operator[](int index) {
-        return variables[index];
+    auto operator[](int p_index) {
+        return items[p_index];
     }
 
-    std::variant<char, operationBlock>* variables[2];
+    std::vector<std::variant<char, operationBlock>> items;
     inline static std::vector<char> s_allVariables;
 };
