@@ -1,8 +1,13 @@
+#include <iostream>
+
 #include "logicalOperations.hpp"
-// #include "operationBlock.hpp"
 
 int main() {
-    truthFunction premise1({materialImplication(conjunction('p', 'r'), 'q')});
+    materialEquivalence premise1({'r', 'q'});
+
+    bool a = premise1.calculate(1, 0);
+
+    std::cout << a << '\n';
 
     return 0;
 }

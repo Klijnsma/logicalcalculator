@@ -10,9 +10,9 @@ public:
     /*
     Constructors for the possible combinations item type:
         - (char, char),
-        - (char, operationBlock),
-        - (operationBlock, char),
-        - (operationBlock, operationBlock)
+        - (char, truthFunction),
+        - (truthFunction, char),
+        - (truthFunction, truthFunction)
     */
 
     truthFunction(char p_item1, char p_item2) {
