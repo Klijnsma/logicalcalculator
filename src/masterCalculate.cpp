@@ -12,7 +12,7 @@ bool masterCalculate(std::vector<std::vector<truthFunction>> premises, std::vect
         int blockSize = possibleCombinations / std::pow(2, (variable + 1));
         bool truthValue = true;
 
-        for (int block = 0; block < blockSize; block++) {
+        for (int block = 0; block < possibleCombinations / blockSize; block++) {
             // Alternate the boolean value for the variable being worked on.
             std::fill(possibleTruthValues[variable][block * blockSize],
                       possibleTruthValues[variable][block * blockSize + blockSize], truthValue);
