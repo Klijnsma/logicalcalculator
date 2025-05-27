@@ -5,7 +5,7 @@
 int main() {
     materialEquivalence premise1({'r', 'q'});
 
-    bool a = premise1.calculate(1, 0);
+    bool a = premise1.calculate(true, true);
 
     std::cout << a << '\n';
 
