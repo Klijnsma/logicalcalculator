@@ -51,7 +51,7 @@ public:
     }
 
     auto operator[](int p_index) {
-        return items[p_index];
+        return std::get<0>(items[p_index]);
     }
 
     std::vector<std::variant<char, truthFunction>> items;
