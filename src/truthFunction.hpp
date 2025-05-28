@@ -17,10 +17,10 @@ public:
 
     truthFunction(char p_item1, char p_item2) {
         // Add variables to s_allVariables if not in there yet.
-        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item1) != s_allVariables.end()) {
+        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item1) == s_allVariables.end()) {
             s_allVariables.push_back(p_item1);
         }
-        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item2) != s_allVariables.end()) {
+        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item2) == s_allVariables.end()) {
             s_allVariables.push_back(p_item2);
         }
 
@@ -29,7 +29,7 @@ public:
     }
     truthFunction(char p_item1, truthFunction p_item2) {
         // Add variable to s_allVariables if not in there yet.
-        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item1) != s_allVariables.end()) {
+        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item1) == s_allVariables.end()) {
             s_allVariables.push_back(p_item1);
         }
 
@@ -38,7 +38,7 @@ public:
     }
     truthFunction(truthFunction p_item1, char p_item2) {
         // Add variable to s_allVariables if not in there yet.
-        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item2) != s_allVariables.end()) {
+        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item2) == s_allVariables.end()) {
             s_allVariables.push_back(p_item2);
         }
 
