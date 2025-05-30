@@ -1,9 +1,8 @@
 #pragma once
 
 #include <cmath>
-// #include <cstring>
-
-// #include <iostream>
+#include <string>
+#include <stdexcept>
 
 #include "logicalOperations.hpp"
 
@@ -46,8 +45,7 @@ public:
             return variableCombinations[variableNumber][row];
         }
 
-        // TODO: make this better.
-        return false;
+        throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in truthFunction::s_allVariables");
     }
 
     ~truthTable() {
