@@ -41,8 +41,11 @@ public:
         }
 
         combinedPremiseResults = new bool[rows];
+        conclusionTruth = new bool[rows];
+        conclusionFollowsFromPremises = new bool[rows];
 
-        // Calculate for each row whether all premises are true
+        // Calculate for each row whether all premises are true, whether the conclusion is true
+        // and whether the conclusion is materially implied by the premises.
         for (int currentRow = 0; currentRow < rows; currentRow++) {
             int currentPremise = 0;
 
@@ -55,12 +58,9 @@ public:
             if (currentPremise == premises.size()) {
                 combinedPremiseResults[currentRow] = true;
             }
-        }
 
-        conclusionTruth = new bool[rows];
-
-        for (int currentRow = 0; currentRow < rows; currentRow++) {
             conclusionTruth[currentRow] = conclusion->calculate(this, currentRow);
+            conclusionFollowsFromPremises[currentRow] = !(combinedPremiseResults[currentRow] && !conclusionTruth[currentRow]);
         }
     }
 
@@ -89,15 +89,18 @@ public:
         delete[] premiseResults;
 
         delete[] combinedPremiseResults;
+        delete[] conclusionTruth;
+        delete[] conclusionFollowsFromPremises;
     }
 
     int columns;
     int rows;
     int variableCount;
 
-    // 2D array to contain all possible truth value combinations of the variables in truthFunction::s_allVariables.
+    // Storage for the actual truth table.
     bool** variableCombinations;
     bool** premiseResults;
     bool* combinedPremiseResults;
     bool* conclusionTruth;
+    bool* conclusionFollowsFromPremises;
 };
