@@ -44,6 +44,8 @@ public:
         conclusionTruth = new bool[rows];
         conclusionFollowsFromPremises = new bool[rows];
 
+        int followingConclusions = 0;
+
         // Calculate for each row whether all premises are true, whether the conclusion is true
         // and whether the conclusion is materially implied by the premises.
         for (int currentRow = 0; currentRow < rows; currentRow++) {
@@ -55,13 +57,20 @@ public:
                     break;
                 }
             }
-            if (currentPremise == premises.size()) {
+            if (currentPremise == premises.size())
                 combinedPremiseResults[currentRow] = true;
-            }
 
             conclusionTruth[currentRow] = conclusion->calculate(this, currentRow);
             conclusionFollowsFromPremises[currentRow] = !(combinedPremiseResults[currentRow] && !conclusionTruth[currentRow]);
+            if (conclusionFollowsFromPremises[currentRow])
+                followingConclusions++;
         }
+
+        if (followingConclusions == rows) {
+            validity = true;
+            return;
+        }
+        validity = false;
     }
 
     bool getTruthValue(char variable, int row) {
@@ -103,4 +112,6 @@ public:
     bool* combinedPremiseResults;
     bool* conclusionTruth;
     bool* conclusionFollowsFromPremises;
+
+    bool validity;
 };
