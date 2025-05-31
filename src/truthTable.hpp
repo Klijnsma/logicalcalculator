@@ -1,14 +1,13 @@
 #pragma once
 
 #include <cmath>
-#include <string>
 #include <stdexcept>
 
-#include "logicalOperations.hpp"
+#include "truthFunction.hpp"
 
 class truthTable {
 public:
-    truthTable(std::vector<std::vector<truthFunction>> premises, std::vector<truthFunction> conclusion) {
+    truthTable(const std::vector<const truthFunction*>& premises, std::vector<const truthFunction*>& conclusion) {
         variableCount = truthFunction::s_allVariables.size();
         columns = variableCount + premises.size();
         rows = std::pow(2, variableCount);
@@ -29,15 +28,22 @@ public:
             }
         }
 
-        // for (int currentPremise = 0; currentPremise < premises.size(); currentPremise++) {
-            // for (int currentTruthFunction = 0; currentTruthFunction < premises[currentPremise].size(); currentTruthFunction++) {
-            // }
-        // }
+        premiseResults = new bool*[premises.size()];
+
+        // Calculate the results of the premises in each row.
+        for (int currentPremise = 0; currentPremise < premises.size(); currentPremise++) {
+            premiseResults[currentPremise] = new bool[rows];
+
+            for (int currentRow = 0; currentRow < rows; currentRow++) {
+                // Dealing with truthFunctions inside truthFunctions is dealt with by the calculate() function.
+                premiseResults[currentPremise][currentRow] = premises[currentPremise]->calculate(this, currentRow);
+            }
+        }
     }
 
     bool getTruthValue(char variable, int row) {
         int variableNumber = std::distance(truthFunction::s_allVariables.begin(),
-                             std::find(truthFunction::s_allVariables.begin(), truthFunction::s_allVariables.end(), variable));
+                                           std::find(truthFunction::s_allVariables.begin(), truthFunction::s_allVariables.end(), variable));
 
         if (std::find(truthFunction::s_allVariables.begin(), truthFunction::s_allVariables.end(), variable)
             != truthFunction::s_allVariables.end()) {
@@ -53,6 +59,11 @@ public:
             delete[] variableCombinations[variable];
         }
         delete[] variableCombinations;
+
+        for (int premise = 0; premise < columns - variableCount; premise++) {
+            delete[] premiseResults[premise];
+        }
+        delete[] premiseResults;
     }
 
     int columns;
@@ -61,4 +72,5 @@ public:
 
     // 2D array to contain all possible truth value combinations of the variables in truthFunction::s_allVariables.
     bool** variableCombinations;
+    bool** premiseResults;
 };

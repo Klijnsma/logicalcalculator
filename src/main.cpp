@@ -1,28 +1,17 @@
-#include <iostream>
-
-#include <algorithm>
-
 #include "logicalOperations.hpp"
 #include "truthTable.hpp"
 
 int main() {
-    conjunction premise1({conjunction{'a', 't'}, 'e'});
-    conjunction premise2({'p', 'q'});
+    materialImplication premise1('p', 'q');
+    conjunction premise2('p', 'r');
+    std::vector<const truthFunction*> premises = {&premise1, &premise2};
 
-    inclusiveDisjunction conclusion({'p', 't'});
+    conjunction conclusionTruthFunction({'r', 'q'});
+    std::vector<const truthFunction*> conclusion = {&conclusionTruthFunction};
 
-    truthTable wow({{premise1}, {premise2}}, {conclusion});
+    truthTable wow(premises, {conclusion});
 
-    std::cout << '\n';
-
-    // Prints a table of variable all possible variable combinations with four variables.
-    for (int i = 0; i < wow.rows; i++) {
-        std::cout << wow.variableCombinations[0][i] << ' ';
-        std::cout << wow.variableCombinations[1][i] << ' ';
-        std::cout << wow.variableCombinations[2][i] << ' ';
-        std::cout << wow.variableCombinations[3][i] << ' ';
-        std::cout << wow.variableCombinations[4][i] << '\n';
-    }
+    wow.getTruthValue('f', 1);
 
     return 0;
 }

@@ -4,7 +4,14 @@
 #include <variant>
 #include <vector>
 
-class truthFunction {
+class truthTable;
+
+class calculation {
+public:
+    virtual bool calculate(truthTable* p_truthTable, int row) const = 0;
+};
+
+class truthFunction : public calculation {
 public:
 
     /*
@@ -23,29 +30,26 @@ public:
         if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item2) == s_allVariables.end())
             s_allVariables.push_back(p_item2);
 
-
         items.push_back(p_item1);
         items.push_back(p_item2);
     }
-    truthFunction(char p_item1, truthFunction p_item2) {
+    truthFunction(char p_item1, truthFunction* p_item2) {
         // Add variable to s_allVariables if not in there yet.
         if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item1) == s_allVariables.end())
             s_allVariables.push_back(p_item1);
 
-
         items.push_back(p_item1);
         items.push_back(p_item2);
     }
-    truthFunction(truthFunction p_item1, char p_item2) {
+    truthFunction(truthFunction* p_item1, char p_item2) {
         // Add variable to s_allVariables if not in there yet.
         if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item2) == s_allVariables.end())
             s_allVariables.push_back(p_item2);
 
-
         items.push_back(p_item1);
         items.push_back(p_item2);
     }
-    truthFunction(truthFunction p_item1, truthFunction p_item2) {
+    truthFunction(truthFunction* p_item1, truthFunction* p_item2) {
         items.push_back(p_item1);
         items.push_back(p_item2);
     }
@@ -54,8 +58,6 @@ public:
         return std::get<0>(items[p_index]);
     }
 
-    bool calculate();
-
-    std::vector<std::variant<char, truthFunction>> items;
+    std::vector<std::variant<char, truthFunction*>> items;
     inline static std::vector<char> s_allVariables;
 };
