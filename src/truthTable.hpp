@@ -45,7 +45,14 @@ public:
         // Calculate for each row whether all premises are true
         for (int currentRow = 0; currentRow < rows; currentRow++) {
             int currentPremise = 0;
-            for (; premiseResults[currentPremise][currentRow] && currentPremise < premises.size(); currentPremise++) {}
+
+            for (; currentPremise < premises.size(); currentPremise++) {
+                if (!premiseResults[currentPremise][currentRow]) {
+                    combinedPremiseResults[currentRow] = false;
+                    break;
+                }
+            }
+
             if (currentPremise == premises.size()) {
                 combinedPremiseResults[currentRow] = true;
             }

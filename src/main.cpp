@@ -11,7 +11,5 @@ int main() {
 
     truthTable wow(premises, {conclusion});
 
-    wow.getTruthValue('f', 1);
-
     return 0;
 }

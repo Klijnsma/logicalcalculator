@@ -49,7 +49,7 @@ public:
             // Make sure any nested truthFunctions are calculated first.
             value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
 
-        return (value1 || value2) & !(value1 && value2);
+        return (value1 || value2) && !(value1 && value2);
     }
 };
 
