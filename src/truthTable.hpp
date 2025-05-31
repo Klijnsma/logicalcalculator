@@ -39,6 +39,17 @@ public:
                 premiseResults[currentPremise][currentRow] = premises[currentPremise]->calculate(this, currentRow);
             }
         }
+
+        combinedPremiseResults = new bool[rows];
+
+        // Calculate for each row whether all premises are true
+        for (int currentRow = 0; currentRow < rows; currentRow++) {
+            int currentPremise = 0;
+            for (; premiseResults[currentPremise][currentRow] && currentPremise < premises.size(); currentPremise++) {}
+            if (currentPremise == premises.size()) {
+                combinedPremiseResults[currentRow] = true;
+            }
+        }
     }
 
     bool getTruthValue(char variable, int row) {
@@ -64,6 +75,8 @@ public:
             delete[] premiseResults[premise];
         }
         delete[] premiseResults;
+
+        delete[] combinedPremiseResults;
     }
 
     int columns;
@@ -73,4 +86,5 @@ public:
     // 2D array to contain all possible truth value combinations of the variables in truthFunction::s_allVariables.
     bool** variableCombinations;
     bool** premiseResults;
+    bool* combinedPremiseResults;
 };
