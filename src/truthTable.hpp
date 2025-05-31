@@ -7,7 +7,7 @@
 
 class truthTable {
 public:
-    truthTable(const std::vector<const truthFunction*>& premises, std::vector<const truthFunction*>& conclusion) {
+    truthTable(const std::vector<const truthFunction*>& premises, const truthFunction* conclusion) {
         variableCount = truthFunction::s_allVariables.size();
         columns = variableCount + premises.size();
         rows = std::pow(2, variableCount);
@@ -52,10 +52,15 @@ public:
                     break;
                 }
             }
-
             if (currentPremise == premises.size()) {
                 combinedPremiseResults[currentRow] = true;
             }
+        }
+
+        conclusionTruth = new bool[rows];
+
+        for (int currentRow = 0; currentRow < rows; currentRow++) {
+            conclusionTruth[currentRow] = conclusion->calculate(this, currentRow);
         }
     }
 
@@ -94,4 +99,5 @@ public:
     bool** variableCombinations;
     bool** premiseResults;
     bool* combinedPremiseResults;
+    bool* conclusionTruth;
 };

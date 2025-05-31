@@ -6,10 +6,9 @@ int main() {
     conjunction premise2('p', 'r');
     std::vector<const truthFunction*> premises = {&premise1, &premise2};
 
-    conjunction conclusionTruthFunction({'r', 'q'});
-    std::vector<const truthFunction*> conclusion = {&conclusionTruthFunction};
+    conjunction conclusion({'r', 'q'});
 
-    truthTable wow(premises, {conclusion});
+    truthTable wow(premises, &conclusion);
 
     return 0;
 }
