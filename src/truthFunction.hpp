@@ -24,6 +24,8 @@ public:
         - (truthFunction, truthFunction)
     */
 
+    truthFunction() = default;
+
     truthFunction(char p_item1, char p_item2) {
         // Add variables to s_allVariables if not in there yet.
         if (std::find(s_allVariables.begin(), s_allVariables.end(), p_item1) == s_allVariables.end())
