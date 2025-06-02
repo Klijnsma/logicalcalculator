@@ -1,14 +1,19 @@
+#include <iostream>
+
 #include "logicalOperations.hpp"
 #include "truthTable.hpp"
 
 int main() {
     materialImplication premise1('p', 'q');
-    conjunction premise2('p', 'r');
+    inclusiveDisjunction part_premise2('r', 'q');
+    conjunction premise2('p', &part_premise2);
     std::vector<const truthFunction*> premises = {&premise1, &premise2};
 
     conjunction conclusion({'r', 'q'});
 
     truthTable wow(premises, &conclusion);
+    std::cout << wow.validity << '\n';
+    std::cout << premise2.getString() << '\n';
 
     return 0;
 }

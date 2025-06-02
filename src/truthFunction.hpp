@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <string>
 #include <variant>
 #include <vector>
 
@@ -9,6 +10,7 @@ class truthTable;
 class calculation {
 public:
     virtual bool calculate(truthTable* p_truthTable, int row) const = 0;
+    virtual std::string getString() = 0;
 };
 
 class truthFunction : public calculation {

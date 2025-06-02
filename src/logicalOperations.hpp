@@ -7,6 +7,24 @@ class conjunction : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
+    std::string getString() override {
+        std::string premiseString;
+
+        if (std::holds_alternative<char>(items[0]))
+            premiseString = std::get<char>(items[0]);
+        else
+            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+
+        premiseString += " ∧ ";
+
+        if (std::holds_alternative<char>(items[1]))
+            premiseString += std::get<char>(items[1]);
+        else
+            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+
+        return premiseString;
+    }
+
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
@@ -31,6 +49,24 @@ public:
 class exclusiveDisjunction : public truthFunction {
 public:
     using truthFunction::truthFunction;
+
+    std::string getString() override {
+        std::string premiseString;
+
+        if (std::holds_alternative<char>(items[0]))
+            premiseString = std::get<char>(items[0]);
+        else
+            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+
+        premiseString += " ⊻ ";
+
+        if (std::holds_alternative<char>(items[1]))
+            premiseString += std::get<char>(items[1]);
+        else
+            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+
+        return premiseString;
+    }
 
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
@@ -57,6 +93,24 @@ class inclusiveDisjunction : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
+    std::string getString() override {
+        std::string premiseString;
+
+        if (std::holds_alternative<char>(items[0]))
+            premiseString = std::get<char>(items[0]);
+        else
+            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+
+        premiseString += " ∨ ";
+
+        if (std::holds_alternative<char>(items[1]))
+            premiseString += std::get<char>(items[1]);
+        else
+            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+
+        return premiseString;
+    }
+
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
@@ -82,6 +136,24 @@ class materialEquivalence : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
+    std::string getString() override {
+        std::string premiseString;
+
+        if (std::holds_alternative<char>(items[0]))
+            premiseString = std::get<char>(items[0]);
+        else
+            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+
+        premiseString += " ↔ ";
+
+        if (std::holds_alternative<char>(items[1]))
+            premiseString += std::get<char>(items[1]);
+        else
+            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+
+        return premiseString;
+    }
+
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
@@ -106,6 +178,24 @@ public:
 class materialImplication : public truthFunction {
 public:
     using truthFunction::truthFunction;
+
+    std::string getString() override {
+        std::string premiseString;
+
+        if (std::holds_alternative<char>(items[0]))
+            premiseString = std::get<char>(items[0]);
+        else
+            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+
+        premiseString += " → ";
+
+        if (std::holds_alternative<char>(items[1]))
+            premiseString += std::get<char>(items[1]);
+        else
+            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+
+        return premiseString;
+    }
 
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
