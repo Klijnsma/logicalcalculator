@@ -63,20 +63,23 @@ public:
     }
 
     int getTruthFunctionCount() const {
-        int subTruthFunctions = 1;
+        int truthFunctions = 0;
 
         if (std::holds_alternative<truthFunction*>(items[0])) {
-            subTruthFunctions++;
-            subTruthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
         }
         if (std::holds_alternative<truthFunction*>(items[1])) {
-            subTruthFunctions++;
-            subTruthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
         }
 
-        return subTruthFunctions;
+        return truthFunctions;
     }
+
 
     std::vector<std::variant<char, truthFunction*>> items;
     inline static std::vector<char> s_allVariables;
+private:
+    inline static int defaultTruthFunctions = 1;
 };

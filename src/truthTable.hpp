@@ -103,7 +103,7 @@ public:
         std::string combinedPremisesString = "(";
         int operators = 0;
 
-        // Print the premises as strings.
+        // Print the premises as strings and begin preparing for printing combinedPremises.
         for (int premise = 0; premise < premiseCount; premise++) {
             std::string currentPremiseString = (*premises)[premise]->getString();
 
@@ -129,6 +129,7 @@ public:
 
         std::cout << combinedPremisesString << " → (" << conclusionString << ")\n";
 
+        // Print the truth values
         for (int currentRow = 0; currentRow < rows; currentRow++) {
             for (int variable = 0; variable < variableCount; variable++) {
                 std::cout << variableCombinations[variable][currentRow] << " | ";

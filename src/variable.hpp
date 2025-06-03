@@ -7,6 +7,8 @@ class variable : public truthFunction {
 public:
     variable(char p_variableCharacter) {
         variableCharacter = p_variableCharacter;
+        items.emplace_back(p_variableCharacter);
+        items.emplace_back(p_variableCharacter);
     }
 
     bool calculate(truthTable* p_truthTable, int row) const override {
@@ -21,4 +23,6 @@ public:
     }
 
     char variableCharacter;
+private:
+    inline static int defaultTruthFunctions = 0;
 };
