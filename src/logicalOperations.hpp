@@ -7,7 +7,7 @@ class conjunction : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
-    std::string getString() override {
+    std::string getString() const override {
         std::string premiseString;
 
         if (std::holds_alternative<char>(items[0]))
@@ -50,7 +50,7 @@ class exclusiveDisjunction : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
-    std::string getString() override {
+    std::string getString() const override {
         std::string premiseString;
 
         if (std::holds_alternative<char>(items[0]))
@@ -93,7 +93,7 @@ class inclusiveDisjunction : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
-    std::string getString() override {
+    std::string getString() const override {
         std::string premiseString;
 
         if (std::holds_alternative<char>(items[0]))
@@ -136,7 +136,7 @@ class materialEquivalence : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
-    std::string getString() override {
+    std::string getString() const override {
         std::string premiseString;
 
         if (std::holds_alternative<char>(items[0]))
@@ -179,7 +179,7 @@ class materialImplication : public truthFunction {
 public:
     using truthFunction::truthFunction;
 
-    std::string getString() override {
+    std::string getString() const override {
         std::string premiseString;
 
         if (std::holds_alternative<char>(items[0]))

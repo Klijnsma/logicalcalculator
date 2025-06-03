@@ -10,7 +10,7 @@ class truthTable;
 class calculation {
 public:
     virtual bool calculate(truthTable* p_truthTable, int row) const = 0;
-    virtual std::string getString() = 0;
+    virtual std::string getString() const = 0;
 };
 
 class truthFunction : public calculation {
@@ -60,6 +60,21 @@ public:
 
     auto operator[](int p_index) {
         return std::get<0>(items[p_index]);
+    }
+
+    int getTruthFunctionCount() const {
+        int subTruthFunctions = 1;
+
+        if (std::holds_alternative<truthFunction*>(items[0])) {
+            subTruthFunctions++;
+            subTruthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+        }
+        if (std::holds_alternative<truthFunction*>(items[1])) {
+            subTruthFunctions++;
+            subTruthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+        }
+
+        return subTruthFunctions;
     }
 
     std::vector<std::variant<char, truthFunction*>> items;

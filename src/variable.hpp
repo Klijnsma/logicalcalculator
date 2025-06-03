@@ -9,11 +9,11 @@ public:
         variableCharacter = p_variableCharacter;
     }
 
-    bool calculate(truthTable* p_truthTable, int row) const {
+    bool calculate(truthTable* p_truthTable, int row) const override {
         return p_truthTable->getTruthValue(variableCharacter, row);
     };
 
-    std::string getString() {
+    std::string getString() const override {
         std::string variableString;
         variableString += variableCharacter;
 
