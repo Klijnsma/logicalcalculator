@@ -6,7 +6,11 @@
 class variable : public truthFunction {
 public:
     variable(char p_variableCharacter) {
+        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_variableCharacter) == s_allVariables.end())
+            s_allVariables.push_back(p_variableCharacter);
+
         variableCharacter = p_variableCharacter;
+
         items.emplace_back(p_variableCharacter);
         items.emplace_back(p_variableCharacter);
     }
