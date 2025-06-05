@@ -103,17 +103,20 @@ public:
         std::string combinedPremisesString;
         columnSizeDiff[premiseCount] = 0;
         int mereVariables = 0;
+        int truthFunctions = 0;
 
         // Print the premises as strings and begin preparing for printing combinedPremises.
         for (int premise = 0; premise < premiseCount; premise++) {
             std::string currentPremiseString = (*premises)[premise]->getString();
             std::cout << currentPremiseString << " | ";
-            columnSizeDiff[premise] = currentPremiseString.length() - 2 - (*premises)[premise]->getTruthFunctionCount();
+            int currentPremiseTruthFunctions = (*premises)[premise]->getTruthFunctionCount();
+            columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions;
 
             // Do different things based on wheter premise is a variable or an actual truth function.
-            if (currentPremiseString.length() > 1) {
+            if (currentPremiseTruthFunctions > 0) {
                 combinedPremisesString += '(' + currentPremiseString + ')';
-                columnSizeDiff[premiseCount] += currentPremiseString.length() - (*premises)[premise]->getTruthFunctionCount() + 1;
+                columnSizeDiff[premiseCount] += currentPremiseString.length() - currentPremiseTruthFunctions + 1;
+                truthFunctions += currentPremiseTruthFunctions;
             }
             else {
                 combinedPremisesString += currentPremiseString;
@@ -132,6 +135,9 @@ public:
             combinedPremisesString += ')';
             columnSizeDiff[premiseCount] += 2;
             if (mereVariables > 1) {
+                columnSizeDiff[premiseCount]--;
+            }
+            if (truthFunctions > 2) {
                 columnSizeDiff[premiseCount]--;
             }
         }
@@ -186,7 +192,7 @@ public:
     const std::vector<const truthFunction*>* premises;
     const truthFunction* conclusion;
 
-    // Storage for the actual truth table.
+    // Storage for the actual truth table truth values.
     bool** variableCombinations;
     bool** premiseResults;
     bool* combinedPremiseResults;
