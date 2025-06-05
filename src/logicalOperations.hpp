@@ -44,6 +44,21 @@ public:
 
         return value1 && value2;
     }
+
+    int getTruthFunctionCount() const override {
+        int truthFunctions = 1;
+
+        if (std::holds_alternative<truthFunction*>(items[0])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+        }
+        if (std::holds_alternative<truthFunction*>(items[1])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+        }
+
+        return truthFunctions;
+    }
 };
 
 class exclusiveDisjunction : public truthFunction {
@@ -86,6 +101,21 @@ public:
             value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
 
         return (value1 || value2) && !(value1 && value2);
+    }
+
+    int getTruthFunctionCount() const override {
+        int truthFunctions = 1;
+
+        if (std::holds_alternative<truthFunction*>(items[0])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+        }
+        if (std::holds_alternative<truthFunction*>(items[1])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+        }
+
+        return truthFunctions;
     }
 };
 
@@ -130,6 +160,21 @@ public:
 
         return value1 || value2;
     }
+
+    int getTruthFunctionCount() const override {
+        int truthFunctions = 1;
+
+        if (std::holds_alternative<truthFunction*>(items[0])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+        }
+        if (std::holds_alternative<truthFunction*>(items[1])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+        }
+
+        return truthFunctions;
+    }
 };
 
 class materialEquivalence : public truthFunction {
@@ -173,6 +218,21 @@ public:
 
         return value1 == value2;
     }
+
+    int getTruthFunctionCount() const override {
+        int truthFunctions = 1;
+
+        if (std::holds_alternative<truthFunction*>(items[0])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+        }
+        if (std::holds_alternative<truthFunction*>(items[1])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+        }
+
+        return truthFunctions;
+    }
 };
 
 class materialImplication : public truthFunction {
@@ -215,5 +275,19 @@ public:
             value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
 
         return !(value1 && !value2);
+    }
+    int getTruthFunctionCount() const override {
+        int truthFunctions = 1;
+
+        if (std::holds_alternative<truthFunction*>(items[0])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+        }
+        if (std::holds_alternative<truthFunction*>(items[1])) {
+            truthFunctions++;
+            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+        }
+
+        return truthFunctions;
     }
 };

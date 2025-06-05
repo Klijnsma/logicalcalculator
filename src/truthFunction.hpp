@@ -11,6 +11,7 @@ class calculation {
 public:
     virtual bool calculate(truthTable* p_truthTable, int row) const = 0;
     virtual std::string getString() const = 0;
+    virtual int getTruthFunctionCount() const = 0;
 };
 
 class truthFunction : public calculation {
@@ -62,24 +63,6 @@ public:
         return std::get<0>(items[p_index]);
     }
 
-    int getTruthFunctionCount() const {
-        int truthFunctions = 0;
-
-        if (std::holds_alternative<truthFunction*>(items[0])) {
-            truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
-        }
-        if (std::holds_alternative<truthFunction*>(items[1])) {
-            truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
-        }
-
-        return truthFunctions;
-    }
-
-
     std::vector<std::variant<char, truthFunction*>> items;
     inline static std::vector<char> s_allVariables;
-private:
-    inline static int defaultTruthFunctions = 1;
 };

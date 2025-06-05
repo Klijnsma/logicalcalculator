@@ -22,6 +22,10 @@ public:
         return variableString;
     }
 
+    int getTruthFunctionCount() const override {
+        return 0;
+    }
+
     char variableCharacter;
 private:
     inline static int defaultTruthFunctions = 0;

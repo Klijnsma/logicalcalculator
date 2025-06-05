@@ -92,40 +92,54 @@ public:
     }
 
     void print() {
-        int columnSize[premiseCount + 2]; // Only premises, combined premises and conclusion rows need column size to be remembered.
-        // columnSize does not include the size of the " | " seperator
+        int columnSizeDiff[premiseCount + 2]; // Only premises, combined premises and conclusion rows need column size to be remembered.
+        // columncSize does not include the size of the " | " seperator
 
         // Print the variables as chars.
         for (int variable = 0; variable < variableCount; variable++) {
             std::cout << truthFunction::s_allVariables[variable] << " | ";
         }
 
-        std::string combinedPremisesString = "(";
-        int operators = 0;
+        std::string combinedPremisesString;
+        columnSizeDiff[premiseCount] = 0;
 
         // Print the premises as strings and begin preparing for printing combinedPremises.
         for (int premise = 0; premise < premiseCount; premise++) {
             std::string currentPremiseString = (*premises)[premise]->getString();
-
             std::cout << currentPremiseString << " | ";
-            columnSize[premise] = currentPremiseString.length() - (*premises)[premise]->getTruthFunctionCount();
+            columnSizeDiff[premise] = currentPremiseString.length() - 2 - (*premises)[premise]->getTruthFunctionCount();
 
-            combinedPremisesString += '(' + (*premises)[premise]->getString() + ") ∧ ";
-            operators += (*premises)[premise]->getTruthFunctionCount();
+            // Do different things based on wheter premise is a variable or an actual truth function.
+            if (currentPremiseString.length() > 1) {
+                combinedPremisesString += '(' + currentPremiseString + ')';
+                columnSizeDiff[premiseCount] += currentPremiseString.length() - (*premises)[premise]->getTruthFunctionCount() + 1;
+            }
+            else {
+                combinedPremisesString += currentPremiseString;
+                columnSizeDiff[premiseCount] += currentPremiseString.length();
+            }
+            combinedPremisesString += " ∧ ";
+            columnSizeDiff[premiseCount] += 3;
         }
 
-        // Remove the trailing conjunction operator.
-        combinedPremisesString = combinedPremisesString.substr(0, combinedPremisesString.length() - 6);
-        combinedPremisesString += ')';
-        std::cout << combinedPremisesString << " | ";
+        combinedPremisesString = combinedPremisesString.substr(0, combinedPremisesString.length() - 5);
+        columnSizeDiff[premiseCount] -= 3;
 
-        columnSize[premiseCount] = 2; // 2 for outermost parentheses
-        columnSize[premiseCount] += combinedPremisesString.length() - 6 - operators;
+        if (premiseCount > 2) {
+            combinedPremisesString.insert(0, 1, '(');
+            combinedPremisesString += ')';
+            columnSizeDiff[premiseCount] += 2;
+        }
+        else {
+            columnSizeDiff[premiseCount] -= 1;
+        }
+
+        std::cout << combinedPremisesString << " | ";
 
         std::string conclusionString = conclusion->getString();
         std::cout << conclusionString << " | ";
 
-        columnSize[premiseCount + 1] = conclusionString.length() - conclusion->getTruthFunctionCount();
+        columnSizeDiff[premiseCount + 1] = conclusionString.length() - 2 - conclusion->getTruthFunctionCount();
 
         std::cout << combinedPremisesString << " → (" << conclusionString << ")\n";
 
@@ -135,10 +149,10 @@ public:
                 std::cout << variableCombinations[variable][currentRow] << " | ";
             }
             for (int premise = 0; premise < premiseCount; premise++) {
-                std::cout << premiseResults[premise][currentRow] << std::string(columnSize[premise] - 2, ' ') << " | ";
+                std::cout << premiseResults[premise][currentRow] << std::string(std::max(columnSizeDiff[premise], 0), ' ') << " | ";
             }
-            std::cout << combinedPremiseResults[currentRow] << std::string(columnSize[premiseCount] - 1, ' ') << " | ";
-            std::cout << conclusionTruth[currentRow] << std::string(columnSize[premiseCount + 1] - 2, ' ') << " | ";
+            std::cout << combinedPremiseResults[currentRow] << std::string(std::max(columnSizeDiff[premiseCount], 0), ' ') << " | ";
+            std::cout << conclusionTruth[currentRow] << std::string(std::max(columnSizeDiff[premiseCount + 1], 0), ' ') << " | ";
             std::cout << conclusionFollowsFromPremises[currentRow] << '\n';
         }
     }
