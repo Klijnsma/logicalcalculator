@@ -6,18 +6,17 @@
 
 int main() {
     materialImplication premise1('p', 'q');
-    exclusiveDisjunction part_premise2('r', 'q');
-    conjunction premise2('p', &part_premise2);
-    std::vector<const truthFunction*> premises = {&premise1, &premise2};
-    variable testVariable('p');
+    exclusiveDisjunction premise2('q', 'd');
+    variable premise3('r');
+    variable premise4('a');
+    conjunction premise5('a', 'f');
+    std::vector<const truthFunction*> premises = {&premise1, &premise2, &premise3, &premise4, &premise5};
 
-    conjunction conclusion({'r', 'q'});
+    variable conclusion('p');
 
     truthTable wow(&premises, &conclusion);
 
     std::cout << premise2.getString() << '\n';
-
-    std::cout << testVariable.getString() << '\n';
 
     wow.print();
 

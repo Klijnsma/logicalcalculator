@@ -102,6 +102,7 @@ public:
 
         std::string combinedPremisesString;
         columnSizeDiff[premiseCount] = 0;
+        int mereVariables = 0;
 
         // Print the premises as strings and begin preparing for printing combinedPremises.
         for (int premise = 0; premise < premiseCount; premise++) {
@@ -117,6 +118,7 @@ public:
             else {
                 combinedPremisesString += currentPremiseString;
                 columnSizeDiff[premiseCount] += currentPremiseString.length();
+                mereVariables++;
             }
             combinedPremisesString += " ∧ ";
             columnSizeDiff[premiseCount] += 3;
@@ -129,9 +131,12 @@ public:
             combinedPremisesString.insert(0, 1, '(');
             combinedPremisesString += ')';
             columnSizeDiff[premiseCount] += 2;
+            if (mereVariables > 1) {
+                columnSizeDiff[premiseCount]--;
+            }
         }
         else {
-            columnSizeDiff[premiseCount] -= 1;
+            columnSizeDiff[premiseCount]--;
         }
 
         std::cout << combinedPremisesString << " | ";
