@@ -8,7 +8,7 @@ int main() {
     variable p('p');
     variable q('q');
     materialImplication premise1(&p, &q);
-    variable premise2('q');
+    variable premise2('p');
     std::vector<const symbol*> premises = {&premise1, &premise2};
 
     variable conclusion('q');

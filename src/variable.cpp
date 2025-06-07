@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "truthFunction.hpp"
 #include "truthTable.hpp"
 #include "variable.hpp"
