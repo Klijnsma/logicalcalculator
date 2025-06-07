@@ -59,7 +59,7 @@ public:
         items.push_back(p_item2);
     }
 
-    auto operator[](int p_index) {
+    const auto operator[](int p_index) {
         return std::get<0>(items[p_index]);
     }
 

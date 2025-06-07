@@ -5,16 +5,11 @@
 #include "variable.hpp"
 
 int main() {
-    variable premise1('p');
-    conjunction premise2('q', 't');
-    conjunction part_premise3('e', 'f');
-    materialImplication premise3('v', &part_premise3);
-    materialEquivalence part_premise4('t', 'y');
-    materialEquivalence premise4('w', &part_premise4);
-    materialEquivalence premise5(&part_premise3, &premise4);
-    std::vector<const truthFunction*> premises = {&premise3, &premise2, &premise4, &premise5};
+    materialImplication premise1('p', 'q');
+    variable premise2('q');
+    std::vector<const truthFunction*> premises = {&premise1, &premise2};
 
-    inclusiveDisjunction conclusion('p', 'q');
+    variable conclusion('q');
 
     truthTable wow(&premises, &conclusion);
 

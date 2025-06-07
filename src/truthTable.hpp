@@ -78,7 +78,7 @@ public:
         validity = false;
     }
 
-    bool getTruthValue(char variable, int row) {
+    bool getTruthValue(char variable, int row) const {
         int variableNumber = std::distance(truthFunction::s_allVariables.begin(),
                                            std::find(truthFunction::s_allVariables.begin(), truthFunction::s_allVariables.end(), variable));
 
@@ -91,9 +91,9 @@ public:
         throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in truthFunction::s_allVariables");
     }
 
-    void print() {
+    void print() const {
         int columnSizeDiff[premiseCount + 2]; // Only premises, combined premises and conclusion rows need column size to be remembered.
-        // columncSize does not include the size of the " | " seperator
+        // column Size does not include the size of the " | " seperator
 
         // Print the variables as chars.
         for (int variable = 0; variable < variableCount; variable++) {
@@ -112,7 +112,7 @@ public:
             int currentPremiseTruthFunctions = (*premises)[premise]->getTruthFunctionCount();
             columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions;
 
-            // Do different things based on wheter premise is a variable or an actual truth function.
+            // Do different things based on whether premise is a variable or an actual truth function.
             if (currentPremiseTruthFunctions > 0) {
                 combinedPremisesString += '(' + currentPremiseString + ')';
                 columnSizeDiff[premiseCount] += currentPremiseString.length() - currentPremiseTruthFunctions + 1;
