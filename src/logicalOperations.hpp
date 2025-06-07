@@ -10,17 +10,17 @@ public:
     std::string getString() const override {
         std::string premiseString;
 
-        if (std::holds_alternative<char>(items[0]))
-            premiseString = std::get<char>(items[0]);
+        if (items[0]->isVariable)
+            premiseString = items[0]->getString();
         else
-            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+            premiseString = '(' + items[0]->getString() + ')';
 
         premiseString += " ∧ ";
 
-        if (std::holds_alternative<char>(items[1]))
-            premiseString += std::get<char>(items[1]);
+        if (items[1]->isVariable)
+            premiseString += items[1]->getString();
         else
-            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+            premiseString += '(' + items[1]->getString() + ')';
 
         return premiseString;
     }
@@ -28,19 +28,19 @@ public:
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
-        if (std::holds_alternative<char>(items[0]))
+        if (items[0]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value1 = p_truthTable->getTruthValue(std::get<char>(items[0]), row);
+            value1 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[0]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value1 = std::get<truthFunction*>(items[0])->calculate(p_truthTable, row);
+            value1 = items[0]->calculate(p_truthTable, row);
 
-        if (std::holds_alternative<char>(items[1]))
+        if (items[1]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value2 = p_truthTable->getTruthValue(std::get<char>(items[1]), row);
+            value2 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[1]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
+            value2 = items[1]->calculate(p_truthTable, row);
 
         return value1 && value2;
     }
@@ -48,13 +48,13 @@ public:
     int getTruthFunctionCount() const override {
         int truthFunctions = 1;
 
-        if (std::holds_alternative<truthFunction*>(items[0])) {
+        if (!items[0]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+            truthFunctions += items[0]->getTruthFunctionCount();
         }
-        if (std::holds_alternative<truthFunction*>(items[1])) {
+        if (!items[1]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+            truthFunctions += items[1]->getTruthFunctionCount();
         }
 
         return truthFunctions;
@@ -68,17 +68,17 @@ public:
     std::string getString() const override {
         std::string premiseString;
 
-        if (std::holds_alternative<char>(items[0]))
-            premiseString = std::get<char>(items[0]);
+        if (items[0]->isVariable)
+            premiseString = items[0]->getString();
         else
-            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+            premiseString = '(' + items[0]->getString() + ')';
 
         premiseString += " ⊻ ";
 
-        if (std::holds_alternative<char>(items[1]))
-            premiseString += std::get<char>(items[1]);
+        if (items[1]->isVariable)
+            premiseString += items[1]->getString();
         else
-            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+            premiseString += '(' + items[1]->getString() + ')';
 
         return premiseString;
     }
@@ -86,19 +86,19 @@ public:
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
-        if (std::holds_alternative<char>(items[0]))
+        if (items[0]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value1 = p_truthTable->getTruthValue(std::get<char>(items[0]), row);
+                value1 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[0]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value1 = std::get<truthFunction*>(items[0])->calculate(p_truthTable, row);
+                value1 = items[0]->calculate(p_truthTable, row);
 
-        if (std::holds_alternative<char>(items[1]))
+        if (items[1]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value2 = p_truthTable->getTruthValue(std::get<char>(items[1]), row);
+                value2 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[1]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
+                value2 = items[1]->calculate(p_truthTable, row);
 
         return (value1 || value2) && !(value1 && value2);
     }
@@ -106,13 +106,13 @@ public:
     int getTruthFunctionCount() const override {
         int truthFunctions = 1;
 
-        if (std::holds_alternative<truthFunction*>(items[0])) {
+        if (!items[0]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+            truthFunctions += items[0]->getTruthFunctionCount();
         }
-        if (std::holds_alternative<truthFunction*>(items[1])) {
+        if (!items[1]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+            truthFunctions += items[1]->getTruthFunctionCount();
         }
 
         return truthFunctions;
@@ -126,17 +126,17 @@ public:
     std::string getString() const override {
         std::string premiseString;
 
-        if (std::holds_alternative<char>(items[0]))
-            premiseString = std::get<char>(items[0]);
+        if (items[0]->isVariable)
+            premiseString = items[0]->getString();
         else
-            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+            premiseString = '(' + items[0]->getString() + ')';
 
         premiseString += " ∨ ";
 
-        if (std::holds_alternative<char>(items[1]))
-            premiseString += std::get<char>(items[1]);
+        if (items[1]->isVariable)
+            premiseString += items[1]->getString();
         else
-            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+            premiseString += '(' + items[1]->getString() + ')';
 
         return premiseString;
     }
@@ -144,19 +144,19 @@ public:
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
-        if (std::holds_alternative<char>(items[0]))
+        if (items[0]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value1 = p_truthTable->getTruthValue(std::get<char>(items[0]), row);
+                value1 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[0]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value1 = std::get<truthFunction*>(items[0])->calculate(p_truthTable, row);
+                value1 = items[0]->calculate(p_truthTable, row);
 
-        if (std::holds_alternative<char>(items[1]))
+        if (items[1]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value2 = p_truthTable->getTruthValue(std::get<char>(items[1]), row);
+                value2 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[1]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
+                value2 = items[1]->calculate(p_truthTable, row);
 
         return value1 || value2;
     }
@@ -164,13 +164,13 @@ public:
     int getTruthFunctionCount() const override {
         int truthFunctions = 1;
 
-        if (std::holds_alternative<truthFunction*>(items[0])) {
+        if (!items[0]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+            truthFunctions += items[0]->getTruthFunctionCount();
         }
-        if (std::holds_alternative<truthFunction*>(items[1])) {
+        if (!items[1]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+            truthFunctions += items[1]->getTruthFunctionCount();
         }
 
         return truthFunctions;
@@ -184,17 +184,17 @@ public:
     std::string getString() const override {
         std::string premiseString;
 
-        if (std::holds_alternative<char>(items[0]))
-            premiseString = std::get<char>(items[0]);
+        if (items[0]->isVariable)
+            premiseString = items[0]->getString();
         else
-            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+            premiseString = '(' + items[0]->getString() + ')';
 
         premiseString += " ↔ ";
 
-        if (std::holds_alternative<char>(items[1]))
-            premiseString += std::get<char>(items[1]);
+        if (items[1]->isVariable)
+            premiseString += items[1]->getString();
         else
-            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+            premiseString += '(' + items[1]->getString() + ')';
 
         return premiseString;
     }
@@ -202,19 +202,19 @@ public:
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
-        if (std::holds_alternative<char>(items[0]))
+        if (items[0]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value1 = p_truthTable->getTruthValue(std::get<char>(items[0]), row);
+                value1 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[0]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value1 = std::get<truthFunction*>(items[0])->calculate(p_truthTable, row);
+                value1 = items[0]->calculate(p_truthTable, row);
 
-        if (std::holds_alternative<char>(items[1]))
+        if (items[1]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value2 = p_truthTable->getTruthValue(std::get<char>(items[1]), row);
+                value2 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[1]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
+                value2 = items[1]->calculate(p_truthTable, row);
 
         return value1 == value2;
     }
@@ -222,13 +222,13 @@ public:
     int getTruthFunctionCount() const override {
         int truthFunctions = 1;
 
-        if (std::holds_alternative<truthFunction*>(items[0])) {
+        if (!items[0]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+            truthFunctions += items[0]->getTruthFunctionCount();
         }
-        if (std::holds_alternative<truthFunction*>(items[1])) {
+        if (!items[1]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+            truthFunctions += items[1]->getTruthFunctionCount();
         }
 
         return truthFunctions;
@@ -242,17 +242,17 @@ public:
     std::string getString() const override {
         std::string premiseString;
 
-        if (std::holds_alternative<char>(items[0]))
-            premiseString = std::get<char>(items[0]);
+        if (items[0]->isVariable)
+            premiseString = items[0]->getString();
         else
-            premiseString = '(' + std::get<truthFunction*>(items[0])->getString() + ')';
+            premiseString = '(' + items[0]->getString() + ')';
 
         premiseString += " → ";
 
-        if (std::holds_alternative<char>(items[1]))
-            premiseString += std::get<char>(items[1]);
+        if (items[1]->isVariable)
+            premiseString += items[1]->getString();
         else
-            premiseString += '(' + std::get<truthFunction*>(items[1])->getString() + ')';
+            premiseString += '(' + items[1]->getString() + ')';
 
         return premiseString;
     }
@@ -260,32 +260,32 @@ public:
     bool calculate(truthTable* p_truthTable, int row) const override {
         bool value1, value2;
 
-        if (std::holds_alternative<char>(items[0]))
+        if (items[0]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value1 = p_truthTable->getTruthValue(std::get<char>(items[0]), row);
+                value1 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[0]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value1 = std::get<truthFunction*>(items[0])->calculate(p_truthTable, row);
+                value1 = items[0]->calculate(p_truthTable, row);
 
-        if (std::holds_alternative<char>(items[1]))
+        if (items[1]->isVariable)
             // Get the truth value for the char variables in the given row.
-            value2 = p_truthTable->getTruthValue(std::get<char>(items[1]), row);
+                value2 = p_truthTable->getTruthValue(reinterpret_cast<variable*>(items[1]), row);
         else
             // Make sure any nested truthFunctions are calculated first.
-            value2 = std::get<truthFunction*>(items[1])->calculate(p_truthTable, row);
+                value2 = items[1]->calculate(p_truthTable, row);
 
         return !(value1 && !value2);
     }
     int getTruthFunctionCount() const override {
         int truthFunctions = 1;
 
-        if (std::holds_alternative<truthFunction*>(items[0])) {
+        if (!items[0]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[0])->getTruthFunctionCount();
+            truthFunctions += items[0]->getTruthFunctionCount();
         }
-        if (std::holds_alternative<truthFunction*>(items[1])) {
+        if (!items[1]->isVariable) {
             truthFunctions++;
-            truthFunctions += std::get<truthFunction*>(items[1])->getTruthFunctionCount();
+            truthFunctions += items[1]->getTruthFunctionCount();
         }
 
         return truthFunctions;

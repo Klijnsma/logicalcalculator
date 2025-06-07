@@ -4,11 +4,12 @@
 #include <stdexcept>
 
 #include "truthFunction.hpp"
+#include "variable.hpp"
 
 class truthTable {
 public:
-    truthTable(const std::vector<const truthFunction*>* p_premises, const truthFunction* p_conclusion) {
-        variableCount = truthFunction::s_allVariables.size();
+    truthTable(const std::vector<const symbol*>* p_premises, const symbol* p_conclusion) {
+        variableCount = symbol::s_allVariables.size();
         columns = variableCount + p_premises->size() + 3;
         rows = std::pow(2, variableCount);
         premiseCount = p_premises->size();
@@ -78,17 +79,17 @@ public:
         validity = false;
     }
 
-    bool getTruthValue(char variable, int row) const {
-        int variableNumber = std::distance(truthFunction::s_allVariables.begin(),
-                                           std::find(truthFunction::s_allVariables.begin(), truthFunction::s_allVariables.end(), variable));
+    bool getTruthValue(const variable* variable, int row) const {
+        int variableNumber = std::distance(symbol::s_allVariables.begin(),
+                                           std::find(symbol::s_allVariables.begin(), symbol::s_allVariables.end(), variable));
 
-        if (std::find(truthFunction::s_allVariables.begin(), truthFunction::s_allVariables.end(), variable)
-            != truthFunction::s_allVariables.end()) {
+        if (std::find(symbol::s_allVariables.begin(), symbol::s_allVariables.end(), variable)
+            != symbol::s_allVariables.end()) {
 
             return variableCombinations[variableNumber][row];
         }
 
-        throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in truthFunction::s_allVariables");
+        throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in symbol::s_allVariables");
     }
 
     void print() const {
@@ -97,7 +98,7 @@ public:
 
         // Print the variables as chars.
         for (int variable = 0; variable < variableCount; variable++) {
-            std::cout << truthFunction::s_allVariables[variable] << " | ";
+            std::cout << (symbol::s_allVariables[variable]->getString()) << " | ";
         }
 
         std::string combinedPremisesString;
@@ -189,8 +190,8 @@ public:
     int variableCount;
     int premiseCount;
 
-    const std::vector<const truthFunction*>* premises;
-    const truthFunction* conclusion;
+    const std::vector<const symbol*>* premises;
+    const symbol* conclusion;
 
     // Storage for the actual truth table truth values.
     bool** variableCombinations;

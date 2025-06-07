@@ -6,17 +6,14 @@
 class variable : public symbol {
 public:
     variable(char p_variableCharacter) {
-        if (std::find(s_allVariables.begin(), s_allVariables.end(), p_variableCharacter) == s_allVariables.end())
-            s_allVariables.push_back(p_variableCharacter);
+        if (std::find(s_allVariables.begin(), s_allVariables.end(), this) == s_allVariables.end())
+            s_allVariables.push_back(this);
 
         variableCharacter = p_variableCharacter;
-
-        items.emplace_back(p_variableCharacter);
-        items.emplace_back(p_variableCharacter);
     }
 
     bool calculate(truthTable* p_truthTable, int row) const override {
-        return p_truthTable->getTruthValue(variableCharacter, row);
+        return p_truthTable->getTruthValue(this, row);
     };
 
     std::string getString() const override {
@@ -31,6 +28,5 @@ public:
     }
 
     char variableCharacter;
-private:
-    inline static int defaultTruthFunctions = 0;
+    const bool isVariable = true;
 };

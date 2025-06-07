@@ -5,9 +5,11 @@
 #include "variable.hpp"
 
 int main() {
-    materialImplication premise1('p', 'q');
+    variable p('p');
+    variable q('q');
+    materialImplication premise1(&p, &q);
     variable premise2('q');
-    std::vector<const truthFunction*> premises = {&premise1, &premise2};
+    std::vector<const symbol*> premises = {&premise1, &premise2};
 
     variable conclusion('q');
 
