@@ -6,15 +6,16 @@
 #include <vector>
 
 class truthTable;
+class variable;
 
-class calculation {
+class symbol {
 public:
     virtual bool calculate(truthTable* p_truthTable, int row) const = 0;
     virtual std::string getString() const = 0;
     virtual int getTruthFunctionCount() const = 0;
 };
 
-class truthFunction : public calculation {
+class truthFunction : public symbol {
 public:
 
     /*

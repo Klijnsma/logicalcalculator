@@ -3,7 +3,7 @@
 #include "truthFunction.hpp"
 #include "truthTable.hpp"
 
-class variable : public truthFunction {
+class variable : public symbol {
 public:
     variable(char p_variableCharacter) {
         if (std::find(s_allVariables.begin(), s_allVariables.end(), p_variableCharacter) == s_allVariables.end())
