@@ -1,9 +1,7 @@
 #pragma once
 
 #include "symbol.hpp"
-
-class truthTable;
-class symbol;
+#include "truthTable.hpp"
 
 class truthFunction : public symbol {
 public:
@@ -18,4 +16,49 @@ public:
 
     std::vector<symbol*> items;
     const bool isVariable = false;
+};
+
+class conjunction : public truthFunction {
+public:
+    using truthFunction::truthFunction;
+
+    std::string getString() const override;
+    bool calculate(truthTable* p_truthTable, int row) const override;
+    int getTruthFunctionCount() const override;
+};
+
+class exclusiveDisjunction : public truthFunction {
+public:
+    using truthFunction::truthFunction;
+
+    std::string getString() const override;
+    bool calculate(truthTable* p_truthTable, int row) const override;
+    int getTruthFunctionCount() const override;
+};
+
+class inclusiveDisjunction : public truthFunction {
+public:
+    using truthFunction::truthFunction;
+
+    std::string getString() const override;
+    bool calculate(truthTable* p_truthTable, int row) const override;
+    int getTruthFunctionCount() const override;
+};
+
+class materialEquivalence : public truthFunction {
+public:
+    using truthFunction::truthFunction;
+
+    std::string getString() const override;
+    bool calculate(truthTable* p_truthTable, int row) const override;
+    int getTruthFunctionCount() const override;
+};
+
+class materialImplication : public truthFunction {
+public:
+    using truthFunction::truthFunction;
+
+    std::string getString() const override;
+    bool calculate(truthTable* p_truthTable, int row) const override;
+    int getTruthFunctionCount() const override;
 };

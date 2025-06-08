@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "logicalOperations.hpp"
+#include "truthFunction.hpp"
 #include "truthTable.hpp"
 #include "variable.hpp"
 
