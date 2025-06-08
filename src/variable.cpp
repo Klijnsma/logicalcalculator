@@ -1,4 +1,4 @@
-// #include <algorithm>
+#include <stdexcept>
 
 #include "truthFunction.hpp"
 #include "truthTable.hpp"
@@ -8,13 +8,10 @@ variable::variable(char p_variableCharacter) : variableCharacter(p_variableChara
     int variable = 0;
     for ( ; variable < s_allVariables.size(); variable++) {
         if (s_allVariables[variable]->variableCharacter == p_variableCharacter)
-            // this = s_allVariables[variable];
-            return;
+            throw std::invalid_argument("[variable::variable()] A variable with this character has already been initialized.");
     }
     if (variable == s_allVariables.size())
         s_allVariables.push_back(this);
-
-    // variableCharacter = p_variableCharacter;
 
     isVariable = true;
 }

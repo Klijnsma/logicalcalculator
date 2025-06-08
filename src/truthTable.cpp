@@ -90,7 +90,7 @@ bool truthTable::getTruthValue(const variable* variable, int row) const {
         return variableCombinations[variableNumber][row];
     }
 
-    throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in symbol::s_allVariables");
+    throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in symbol::s_allVariables.");
 }
 
 void truthTable::print() const {
