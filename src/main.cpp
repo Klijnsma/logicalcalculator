@@ -8,14 +8,9 @@ int main() {
     variable p('p');
     variable q('q');
     materialImplication premise1(&p, &q);
-    variable premise2('p');
-    std::vector<const symbol*> premises = {&premise1, &premise2};
+    std::vector<const symbol*> premises = {&premise1, &p};
 
-    variable conclusion('q');
-
-    truthTable wow(&premises, &conclusion);
-
-    std::cout << premise2.getString() << '\n';
+    truthTable wow(&premises, &q);
 
     wow.print();
 
