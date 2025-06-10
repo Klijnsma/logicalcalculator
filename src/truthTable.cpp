@@ -151,10 +151,13 @@ void truthTable::print() const {
 
     std::string conclusionString = conclusion->getString();
     std::cout << conclusionString << " | ";
-
     columnSizeDiff[premiseCount + 1] = conclusionString.length() - 2 - conclusion->getTruthFunctionCount();
 
-    std::cout << combinedPremisesString << " → (" << conclusionString << ")\n";
+    std::cout << combinedPremisesString << " → ";
+    if (conclusion->isVariable)
+        std::cout << conclusionString << '\n';
+    else
+        std::cout << "(" << conclusionString << ")\n";
 
     // Print the truth values
     for (int currentRow = 0; currentRow < rows; currentRow++) {
