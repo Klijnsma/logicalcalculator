@@ -1,7 +1,11 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
 #include "symbol.hpp"
-#include "truthTable.hpp"
+
+class truthTable;
 
 class truthFunction : public symbol {
 public:

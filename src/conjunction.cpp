@@ -1,4 +1,5 @@
 #include "truthFunction.hpp"
+#include "truthTable.hpp"
 
 std::string conjunction::getString() const {
     std::string premiseString;

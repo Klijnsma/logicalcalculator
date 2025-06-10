@@ -1,4 +1,5 @@
 #include "truthFunction.hpp"
+#include "truthTable.hpp"
 
 std::string materialImplication::getString() const {
     std::string premiseString;
