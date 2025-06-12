@@ -1,7 +1,8 @@
+#include <algorithm>
+#include <array>
 #include <fstream>
 #include <iostream>
-#include <map>
-#include <typeindex>
+#include <stdexcept>
 #include <vector>
 
 #include "csvParsing.hpp"
@@ -11,14 +12,51 @@
 
 namespace csvParsing {
 
-
-    std::map<std::string, std::type_index> truthFunctionTypes = {
-        {"conjunction", typeid(conjunction)},
-        {"exclusive disjunction", typeid(exclusiveDisjunction)},
-        {"inclusive disjunction", typeid(inclusiveDisjunction)},
-        {"material equivalence", typeid(materialEquivalence)},
-        {"material implication", typeid(materialImplication)},
+    std::array<std::string, 5> truthFunctionTypes = {
+        "conjunction",
+        "exclusive disjunction",
+        "inclusive disjunction",
+        "material equivalence",
+        "material implication",
     };
+
+    std::array<symbol*, 2> extractParameters(std::vector<std::string> p_parameterBlocks) {}
+
+    truthFunction* extractTruthFunction(std::vector<std::string> csvBlocks) {
+        int foundVariables = 0;
+        int variableIndices[2];
+
+        for (int block = 0; block < csvBlocks.size() && foundVariables < 2; block++) {
+            if (csvBlocks[block].length() > 1) {
+                if (std::find(truthFunctionTypes.begin(),truthFunctionTypes.end(), csvBlocks[block])) {
+                    std::vector<std::string> parameterBlocks;
+                    parameterBlocks.assign(csvBlocks.begin(), csvBlocks.end());
+                    const std::array<symbol*, 2> parameters = extractParameters(parameterBlocks);
+                    if (csvBlocks[block] == "conjunction") {
+                        return new conjunction(parameters[0], parameters[1]);
+                    }
+                    if (csvBlocks[block] == "exclusive disjunction") {
+                        return new exclusiveDisjunction(parameters[0], parameters[1]);
+                    }
+                    if (csvBlocks[block] == "inclusive disjunction") {
+                        return new inclusiveDisjunction(parameters[0], parameters[1]);
+                    }
+                    if (csvBlocks[block] == "material equivalence") {
+                        return new materialEquivalence(parameters[0], parameters[1]);
+                    }
+                    if (csvBlocks[block] == "material implication") {
+                        return new materialImplication(parameters[0], parameters[1]);
+                    }
+                }
+                else {
+                    throw std::invalid_argument("Did not recognize truth function type of input longer than one character.");
+                }
+            }
+            else if (block == 0) {
+                throw std::invalid_argument("Lines must either contain a solitary variable or start with a truth function name");
+            }
+        }
+    }
 
     symbol* getSymbol(std::ifstream& csvFile) {
         std::string symbolText;
@@ -48,7 +86,7 @@ namespace csvParsing {
             blocks.push_back(symbolText.substr(characterOffset, character - characterOffset));
         }
 
-        // Somehow turn blocks string-vector into a truthFunction*.
+        return extractTruthFunction(blocks);
     }
 
 }
