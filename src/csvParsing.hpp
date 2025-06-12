@@ -3,8 +3,6 @@
 
 namespace csvParsing {
 
-    class symbolPackage;
-
-    symbolPackage* getSymbol(std::ifstream& csvFile);
+    symbol* getSymbol(std::ifstream& csvFile);
 
 }
