@@ -1,9 +1,8 @@
 #include <fstream>
 #include <iostream>
-#include <vector>
 #include <map>
 #include <typeindex>
-#include <algorithm>
+#include <vector>
 
 #include "csvParsing.hpp"
 #include "symbol.hpp"
@@ -24,6 +23,10 @@ namespace csvParsing {
             mainSymbol = new variable(p_mainSymbol);
         }
 
+        symbolPackage(variable* p_mainSymbol) {
+            mainSymbol = p_mainSymbol;
+        }
+
         symbol* mainSymbol;
         std::vector<symbol*> parameters;
     };
@@ -37,17 +40,33 @@ namespace csvParsing {
     };
 
     symbolPackage* getSymbol(std::ifstream& csvFile) {
-        char symbolTextBuffer;
-        csvFile >> symbolTextBuffer;
         std::string symbolText;
-
-        while (symbolTextBuffer != ',') {
-            symbolText += symbolTextBuffer;
-            csvFile >> symbolTextBuffer;
+        std::getline(csvFile, symbolText);
+        if (symbolText.length() == 1) {
+            variable* foundVariable = variable::variableExists(symbolText[0]);
+            if (foundVariable != nullptr) {
+                return new symbolPackage(foundVariable);
+            }
+            return new symbolPackage(static_cast<char>(symbolText[0]));
         }
 
-        if (symbolText.length() == 1) {
-            return new symbolPackage(static_cast<char>(symbolText[0]));
+        symbolPackage* packagedSymbol;
+
+        std::vector<std::string> blocks;
+        int blockIndex = 0;
+        int characterOffset = 0;
+        int character = 0;
+        for (; character < symbolText.length(); character++) {
+            if (symbolText[character] == ',') {
+                // Retrieve blocks as strings.
+                blocks.reserve(blockIndex + 1);
+                blocks.push_back(symbolText.substr(characterOffset, character - characterOffset));
+                blockIndex++;
+                characterOffset = character + 1;
+            }
+        }
+        if (characterOffset < character) {
+            blocks.push_back(symbolText.substr(characterOffset, character - characterOffset));
         }
     }
 
