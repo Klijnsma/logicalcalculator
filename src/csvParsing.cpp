@@ -9,15 +9,6 @@
 #include "variable.hpp"
 
 namespace csvParsing {
-
-    std::array<std::string, 5> truthFunctionTypes = {
-        "conjunction",
-        "exclusive disjunction",
-        "inclusive disjunction",
-        "material equivalence",
-        "material implication",
-    };
-
     std::array<symbol*, 2> extractParameters(const std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
         int parameterCount = 0;
