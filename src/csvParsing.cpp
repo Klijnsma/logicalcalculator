@@ -9,6 +9,7 @@
 #include "variable.hpp"
 
 namespace csvParsing {
+
     std::array<symbol*, 2> extractParameters(const std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
         int parameterCount = 0;
@@ -86,6 +87,9 @@ namespace csvParsing {
             }
             return new variable(symbolText[0]);
         }
+
+        if (symbolText == "conclusion")
+            return nullptr;
 
         // Retrieve blocks as strings.
         std::vector<std::string> blocks;

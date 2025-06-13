@@ -7,21 +7,25 @@
 #include "variable.hpp"
 
 int main() {
-    variable p('p');
-    variable q('q');
-    materialImplication premise1(&p, &q);
-    std::vector<const symbol*> premises = {&premise1, &p};
-
-    truthTable wow(&premises, &q);
-
-    wow.print();
-
     std::ifstream test_file;
     test_file.open("test.csv");
+    std::vector<const symbol*> premises;
+    symbol* conclusion = nullptr;
 
-    std::cout << csvParsing::getSymbol(test_file) << std::endl;
-
+    while (!test_file.eof()) {
+        premises.push_back(csvParsing::getSymbol(test_file));
+        if (premises.back() == nullptr) {
+            conclusion = csvParsing::getSymbol(test_file);
+            premises.pop_back();
+            break;
+        }
+    }
     test_file.close();
+
+    if (!premises.empty() && conclusion != nullptr) {
+        truthTable wow(&premises, conclusion);
+        wow.print();
+    }
 
     return 0;
 }
