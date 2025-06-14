@@ -16,8 +16,8 @@ public:
         isVariable = false;
     }
 
-    const symbol* operator[](int p_index) const {
-        return items[0];
+    const symbol* operator[](const int p_index) const {
+        return items[p_index];
     }
 
     std::vector<variable*> getVariables() const override {
@@ -42,6 +42,7 @@ public:
         return foundVariables;
     }
 
+protected:
     std::array<symbol*, 2> items;
 };
 
