@@ -4,7 +4,7 @@
 #include "truthTable.hpp"
 #include "variable.hpp"
 
-variable::variable(char p_variableCharacter) : variableCharacter(p_variableCharacter) {
+variable::variable(const char p_variableCharacter) : variableCharacter(p_variableCharacter) {
     int variable = 0;
     for ( ; variable < s_allVariables.size(); variable++) {
         if (s_allVariables[variable]->variableCharacter == p_variableCharacter)
@@ -16,7 +16,7 @@ variable::variable(char p_variableCharacter) : variableCharacter(p_variableChara
     isVariable = true;
 }
 
-bool variable::calculate(truthTable* p_truthTable, int row) const {
+bool variable::calculate(const truthTable* p_truthTable, const int row) const {
     return p_truthTable->getTruthValue(this, row);
 }
 
@@ -35,7 +35,7 @@ std::vector<variable*> variable::getVariables() const {
     return {variableExists(variableCharacter)};
 }
 
-variable* variable::variableExists(char p_variableCharacter) {
+variable* variable::variableExists(const char p_variableCharacter) {
     for (int variable = 0; variable < s_allVariables.size(); variable++) {
         if (s_allVariables[variable]->variableCharacter == p_variableCharacter)
             return s_allVariables[variable];

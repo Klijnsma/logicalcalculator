@@ -50,7 +50,7 @@ public:
     using truthFunction::truthFunction;
 
     std::string getString() const override;
-    bool calculate(truthTable* p_truthTable, int row) const override;
+    bool calculate(const truthTable* p_truthTable, int row) const override;
     int getTruthFunctionCount() const override;
 };
 
@@ -59,7 +59,7 @@ public:
     using truthFunction::truthFunction;
 
     std::string getString() const override;
-    bool calculate(truthTable* p_truthTable, int row) const override;
+    bool calculate(const truthTable* p_truthTable, int row) const override;
     int getTruthFunctionCount() const override;
 };
 
@@ -68,7 +68,7 @@ public:
     using truthFunction::truthFunction;
 
     std::string getString() const override;
-    bool calculate(truthTable* p_truthTable, int row) const override;
+    bool calculate(const truthTable* p_truthTable, int row) const override;
     int getTruthFunctionCount() const override;
 };
 
@@ -77,7 +77,7 @@ public:
     using truthFunction::truthFunction;
 
     std::string getString() const override;
-    bool calculate(truthTable* p_truthTable, int row) const override;
+    bool calculate(const truthTable* p_truthTable, int row) const override;
     int getTruthFunctionCount() const override;
 };
 
@@ -86,6 +86,6 @@ public:
     using truthFunction::truthFunction;
 
     std::string getString() const override;
-    bool calculate(truthTable* p_truthTable, int row) const override;
+    bool calculate(const truthTable* p_truthTable, int row) const override;
     int getTruthFunctionCount() const override;
 };

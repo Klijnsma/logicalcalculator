@@ -10,7 +10,7 @@
 
 truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbol* p_conclusion) {
     for (int premise = 0; premise < p_premises->size(); premise++) {
-        std::vector<variable*> premiseVariables = (*p_premises)[premise]->getVariables();
+        const std::vector<variable*> premiseVariables = (*p_premises)[premise]->getVariables();
 
         for (int variable = 0; variable < premiseVariables.size(); variable++) {
             if (std::find(m_variables.begin(), m_variables.end(), premiseVariables[variable]) == m_variables.end())
@@ -18,7 +18,7 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
         }
     }
 
-    std::vector<variable*> conclusionVariables = p_conclusion->getVariables();
+    const std::vector<variable*> conclusionVariables = p_conclusion->getVariables();
     for (int variable = 0; variable < conclusionVariables.size(); variable++) {
         if (std::find(m_variables.begin(), m_variables.end(), conclusionVariables[variable]) == m_variables.end())
             m_variables.push_back(conclusionVariables[variable]);
@@ -37,7 +37,7 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
     // Calculate every possible truth value combination for the given amount of variables and store them in possibleTruthValues.
     for (int variable = 0; variable < variableCount; variable++) {
         variableCombinations[variable] = new bool[rows];
-        int blockSize = rows / std::pow(2, variable + 1);
+        const int blockSize = rows / std::pow(2, variable + 1);
         bool truthValue = true;
 
         for (int block = 0; block < rows / blockSize; block++) {
@@ -94,8 +94,8 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
     validity = false;
 }
 
-bool truthTable::getTruthValue(const variable* variable, int row) const {
-    int variableNumber = std::distance(m_variables.begin(),
+bool truthTable::getTruthValue(const variable* variable, const int row) const {
+    const int variableNumber = std::distance(m_variables.begin(),
                                        std::find(m_variables.begin(), m_variables.end(), variable));
 
     if (std::find(m_variables.begin(), m_variables.end(), variable)

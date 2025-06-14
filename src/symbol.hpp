@@ -8,7 +8,7 @@ class variable;
 
 class symbol {
 public:
-    virtual bool calculate(truthTable* p_truthTable, int row) const = 0;
+    virtual bool calculate(const truthTable* p_truthTable, int row) const = 0;
     virtual std::string getString() const = 0;
     virtual int getTruthFunctionCount() const = 0;
     virtual std::vector<variable*> getVariables() const = 0;
