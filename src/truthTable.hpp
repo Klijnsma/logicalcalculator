@@ -11,6 +11,7 @@ public:
     bool getTruthValue(const variable* variable, int row) const;
     void print() const;
 
+private:
     int columns;
     int rows;
     int variableCount;
