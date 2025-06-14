@@ -10,8 +10,8 @@ class truthTable;
 class truthFunction : public symbol {
 public:
     truthFunction(symbol* p_item1, symbol* p_item2) {
-        items.push_back(p_item1);
-        items.push_back(p_item2);
+        items[0] = p_item1;
+        items[1] = p_item2;
 
         isVariable = false;
     }
@@ -20,7 +20,27 @@ public:
         return items[0];
     }
 
-    std::vector<symbol*> items;
+    std::vector<variable*> getVariables() {
+        std::vector<variable*> foundVariables;
+
+        if (items[0]->isVariable)
+            foundVariables.push_back(reinterpret_cast<variable*>(items[0]));
+        else {
+            std::vector<variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[0])->getVariables();
+            foundVariables.reserve(singleParametersVariables.size());
+            foundVariables.insert(foundVariables.end(), singleParametersVariables.begin(), singleParametersVariables.end());
+        }
+
+        if (items[1]->isVariable)
+            foundVariables.push_back(reinterpret_cast<variable*>(items[1]));
+        else {
+            std::vector<variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[1])->getVariables();
+            foundVariables.reserve(singleParametersVariables.size());
+            foundVariables.insert(foundVariables.end(), singleParametersVariables.begin(), singleParametersVariables.end());
+        }
+    }
+
+    std::array<symbol*, 2> items;
 };
 
 class conjunction : public truthFunction {
