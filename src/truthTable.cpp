@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -10,7 +9,22 @@
 
 
 truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbol* p_conclusion) {
-    variableCount = symbol::s_allVariables.size();
+    for (int premise = 0; premise < p_premises->size(); premise++) {
+        std::vector<variable*> premiseVariables = (*p_premises)[premise]->getVariables();
+
+        for (int variable = 0; variable < premiseVariables.size(); variable++) {
+            if (std::find(m_variables.begin(), m_variables.end(), premiseVariables[variable]) == m_variables.end())
+                m_variables.push_back(premiseVariables[variable]);
+        }
+    }
+
+    std::vector<variable*> conclusionVariables = p_conclusion->getVariables();
+    for (int variable = 0; variable < conclusionVariables.size(); variable++) {
+        if (std::find(m_variables.begin(), m_variables.end(), conclusionVariables[variable]) == m_variables.end())
+            m_variables.push_back(conclusionVariables[variable]);
+    }
+
+    variableCount = m_variables.size();
     columns = variableCount + p_premises->size() + 3;
     rows = std::pow(2, variableCount);
     premiseCount = p_premises->size();
@@ -81,16 +95,16 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
 }
 
 bool truthTable::getTruthValue(const variable* variable, int row) const {
-    int variableNumber = std::distance(symbol::s_allVariables.begin(),
-                                       std::find(symbol::s_allVariables.begin(), symbol::s_allVariables.end(), variable));
+    int variableNumber = std::distance(m_variables.begin(),
+                                       std::find(m_variables.begin(), m_variables.end(), variable));
 
-    if (std::find(symbol::s_allVariables.begin(), symbol::s_allVariables.end(), variable)
-        != symbol::s_allVariables.end()) {
+    if (std::find(m_variables.begin(), m_variables.end(), variable)
+        != m_variables.end()) {
 
         return variableCombinations[variableNumber][row];
     }
 
-    throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in symbol::s_allVariables.");
+    throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in truthTable.");
 }
 
 void truthTable::print() const {
@@ -99,7 +113,7 @@ void truthTable::print() const {
 
     // Print the variables as chars.
     for (int variable = 0; variable < variableCount; variable++) {
-        std::cout << (symbol::s_allVariables[variable]->getString()) << " | ";
+        std::cout << (m_variables[variable]->getString()) << " | ";
     }
 
     std::string combinedPremisesString;

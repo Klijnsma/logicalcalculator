@@ -20,7 +20,7 @@ public:
         return items[0];
     }
 
-    std::vector<variable*> getVariables() {
+    std::vector<variable*> getVariables() const override {
         std::vector<variable*> foundVariables;
 
         if (items[0]->isVariable)
@@ -38,6 +38,8 @@ public:
             foundVariables.reserve(singleParametersVariables.size());
             foundVariables.insert(foundVariables.end(), singleParametersVariables.begin(), singleParametersVariables.end());
         }
+
+        return foundVariables;
     }
 
     std::array<symbol*, 2> items;

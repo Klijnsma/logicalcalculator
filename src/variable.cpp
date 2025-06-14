@@ -31,6 +31,10 @@ int variable::getTruthFunctionCount() const {
     return 0;
 }
 
+std::vector<variable*> variable::getVariables() const {
+    return {variableExists(variableCharacter)};
+}
+
 variable* variable::variableExists(char p_variableCharacter) {
     for (int variable = 0; variable < s_allVariables.size(); variable++) {
         if (s_allVariables[variable]->variableCharacter == p_variableCharacter)

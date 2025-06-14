@@ -19,6 +19,7 @@ private:
 
     const std::vector<const symbol*>* premises;
     const symbol* conclusion;
+    std::vector<variable*> m_variables;
 
     // Storage for the actual truth table truth values.
     bool** variableCombinations;
