@@ -10,8 +10,8 @@ class truthTable;
 class truthFunction : public symbol {
 public:
     truthFunction(symbol* p_item1, symbol* p_item2) {
-        items[0] = p_item1;
-        items[1] = p_item2;
+        items.push_back(p_item1);
+        items.push_back(p_item2);
 
         isVariable = false;
     }
@@ -43,7 +43,7 @@ public:
     }
 
 protected:
-    std::array<symbol*, 2> items;
+    std::vector<symbol*> items;
 };
 
 class conjunction : public truthFunction {
