@@ -18,7 +18,7 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
             bool foundVariable = false;
 
             for (int truthTableVariable = 0; truthTableVariable < m_variables.size(); truthTableVariable++) {
-                if (premiseVariables[currentPremiseVariable]->getString() == m_variables[truthTableVariable]->getString()) {
+                if (*premiseVariables[currentPremiseVariable] == *m_variables[truthTableVariable]) {
                     foundVariable = true;
                     break;
                 }
@@ -37,7 +37,7 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
             bool foundVariable = false;
 
             for (int truthTableVariable = 0; truthTableVariable < m_variables.size(); truthTableVariable++) {
-                if (conclusionVariables[currentConclusionVariable]->getString() == m_variables[truthTableVariable]->getString()) {
+                if (*conclusionVariables[currentConclusionVariable] == *m_variables[truthTableVariable]) {
                     foundVariable = true;
                     break;
                 }
@@ -120,7 +120,7 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
 
 bool truthTable::getTruthValue(const variable* variable, const int row) const {
     for (int variableNumber = 0; variableNumber < variableCount; variableNumber++) {
-        if (m_variables[variableNumber]->getString() == variable->getString()) {
+        if (*m_variables[variableNumber] == *variable) {
             return variableCombinations[variableNumber][row];
         }
     }
