@@ -14,6 +14,7 @@ public:
         items.push_back(p_item2);
 
         isVariable = false;
+        isVariable = const_cast<const bool&>(isVariable);
     }
 
     const symbol* operator[](const int p_index) const {

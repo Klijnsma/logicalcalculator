@@ -18,7 +18,7 @@ variable::variable(const char p_variableCharacter) {
     }
 
     isVariable = true;
-    const_cast<const bool*>(&isVariable);
+    isVariable = const_cast<const bool&>(isVariable);
 }
 
 bool variable::calculate(const truthTable* p_truthTable, const int row) const {
