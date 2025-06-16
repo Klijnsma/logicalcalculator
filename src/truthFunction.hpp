@@ -20,13 +20,13 @@ public:
         return items[p_index];
     }
 
-    std::vector<variable*> getVariables() const override {
-        std::vector<variable*> foundVariables;
+    std::vector<const variable*> getVariables() const override {
+        std::vector<const variable*> foundVariables;
 
         if (items[0]->isVariable)
             foundVariables.push_back(reinterpret_cast<variable*>(items[0]));
         else {
-            std::vector<variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[0])->getVariables();
+            std::vector<const variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[0])->getVariables();
             foundVariables.reserve(singleParametersVariables.size());
             foundVariables.insert(foundVariables.end(), singleParametersVariables.begin(), singleParametersVariables.end());
         }
@@ -34,7 +34,7 @@ public:
         if (items[1]->isVariable)
             foundVariables.push_back(reinterpret_cast<variable*>(items[1]));
         else {
-            std::vector<variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[1])->getVariables();
+            std::vector<const variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[1])->getVariables();
             foundVariables.reserve(singleParametersVariables.size());
             foundVariables.insert(foundVariables.end(), singleParametersVariables.begin(), singleParametersVariables.end());
         }

@@ -7,21 +7,45 @@
 #include "truthTable.hpp"
 #include "variable.hpp"
 
-
 truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbol* p_conclusion) {
-    for (int premise = 0; premise < p_premises->size(); premise++) {
-        const std::vector<variable*> premiseVariables = (*p_premises)[premise]->getVariables();
 
-        for (int variable = 0; variable < premiseVariables.size(); variable++) {
-            if (std::find(m_variables.begin(), m_variables.end(), premiseVariables[variable]) == m_variables.end())
-                m_variables.push_back(premiseVariables[variable]);
+    // Add the pointers to variables from p_premises to m_variables, avoiding any duplicates.
+    for (int premise = 0; premise < p_premises->size(); premise++) {
+        const std::vector<const variable*> premiseVariables = (*p_premises)[premise]->getVariables();
+
+        // For every variable in premiseVariables, cycle through m_variables and check whether they are already stored in there.
+        for (int currentPremiseVariable = 0; currentPremiseVariable < premiseVariables.size(); currentPremiseVariable++) {
+            bool foundVariable = false;
+
+            for (int truthTableVariable = 0; truthTableVariable < m_variables.size(); truthTableVariable++) {
+                if (premiseVariables[currentPremiseVariable]->getString() == m_variables[truthTableVariable]->getString()) {
+                    foundVariable = true;
+                    break;
+                }
+            }
+
+            if (!foundVariable)
+                m_variables.push_back(premiseVariables[currentPremiseVariable]);
         }
     }
 
-    const std::vector<variable*> conclusionVariables = p_conclusion->getVariables();
-    for (int variable = 0; variable < conclusionVariables.size(); variable++) {
-        if (std::find(m_variables.begin(), m_variables.end(), conclusionVariables[variable]) == m_variables.end())
-            m_variables.push_back(conclusionVariables[variable]);
+    // Do the same thing with p_conclusion
+    {
+        const std::vector<const variable*> conclusionVariables = p_conclusion->getVariables();
+
+        for (int currentConclusionVariable = 0; currentConclusionVariable < conclusionVariables.size(); currentConclusionVariable++) {
+            bool foundVariable = false;
+
+            for (int truthTableVariable = 0; truthTableVariable < m_variables.size(); truthTableVariable++) {
+                if (conclusionVariables[currentConclusionVariable]->getString() == m_variables[truthTableVariable]->getString()) {
+                    foundVariable = true;
+                    break;
+                }
+            }
+
+            if (!foundVariable)
+                m_variables.push_back(conclusionVariables[currentConclusionVariable]);
+        }
     }
 
     variableCount = m_variables.size();
@@ -95,13 +119,10 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
 }
 
 bool truthTable::getTruthValue(const variable* variable, const int row) const {
-    const int variableNumber = std::distance(m_variables.begin(),
-                                       std::find(m_variables.begin(), m_variables.end(), variable));
-
-    if (std::find(m_variables.begin(), m_variables.end(), variable)
-        != m_variables.end()) {
-
-        return variableCombinations[variableNumber][row];
+    for (int variableNumber = 0; variableNumber < variableCount; variableNumber++) {
+        if (m_variables[variableNumber]->getString() == variable->getString()) {
+            return variableCombinations[variableNumber][row];
+        }
     }
 
     throw std::invalid_argument("[truthTable::getTruthValue()]: Variable not found in truthTable.");

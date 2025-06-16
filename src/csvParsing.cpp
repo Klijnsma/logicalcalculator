@@ -16,11 +16,7 @@ namespace csvParsing {
 
         for (int block = 0; block < p_parameterBlocks.size() && parameterCount < 2; block++) {
             if (p_parameterBlocks[block].length() == 1) { // p_parameterBlocks[block] is a variable
-                variable* existentVariable = variable::variableExists(p_parameterBlocks[block][0]);
-                if (existentVariable == nullptr)
-                    foundParameters[parameterCount] = new variable(p_parameterBlocks[block][0]);
-                else
-                    foundParameters[parameterCount] = existentVariable;
+                foundParameters[parameterCount] = new variable(p_parameterBlocks[block][0]); // TODO use smart pointer to avoid memory leak
 
                 parameterCount++;
             }
@@ -80,13 +76,8 @@ namespace csvParsing {
     symbol* getSymbol(std::ifstream& csvFile) {
         std::string symbolText;
         std::getline(csvFile, symbolText);
-        if (symbolText.length() == 1) {
-            variable* foundVariable = variable::variableExists(symbolText[0]);
-            if (foundVariable != nullptr) {
-                return foundVariable;
-            }
+        if (symbolText.length() == 1)
             return new variable(symbolText[0]);
-        }
 
         if (symbolText == "conclusion")
             return nullptr;

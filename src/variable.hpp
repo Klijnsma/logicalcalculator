@@ -7,8 +7,13 @@ public:
     bool calculate(const truthTable* p_truthTable, int row) const override;
     std::string getString() const override;
     int getTruthFunctionCount() const override;
-    std::vector<variable*> getVariables() const override;
-    static variable* variableExists(char p_variableCharacter);
+    static bool variableExists(char p_variableCharacter);
 
-    const char variableCharacter;
+    bool operator==(const variable& p_other) const;
+    bool operator!=(const variable& p_other) const;
+
+private:
+    std::vector<const variable*> getVariables() const override;
+
+    char variableCharacter;
 };

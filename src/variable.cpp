@@ -1,19 +1,24 @@
-#include <stdexcept>
-
 #include "truthFunction.hpp"
 #include "truthTable.hpp"
 #include "variable.hpp"
 
-variable::variable(const char p_variableCharacter) : variableCharacter(p_variableCharacter) {
+#include <vector>
+
+variable::variable(const char p_variableCharacter) {
     int variable = 0;
     for ( ; variable < s_allVariables.size(); variable++) {
-        if (s_allVariables[variable]->variableCharacter == p_variableCharacter)
-            throw std::invalid_argument("[variable::variable()] A variable with this character has already been initialized.");
+        if (s_allVariables[variable] == p_variableCharacter) {
+            variableCharacter = s_allVariables[variable];
+            break;
+        }
     }
-    if (variable == s_allVariables.size())
-        s_allVariables.push_back(this);
+    if (variable == s_allVariables.size()) {
+        s_allVariables.push_back(p_variableCharacter);
+        variableCharacter = s_allVariables.back();
+    }
 
     isVariable = true;
+    const_cast<const bool*>(&isVariable);
 }
 
 bool variable::calculate(const truthTable* p_truthTable, const int row) const {
@@ -31,14 +36,23 @@ int variable::getTruthFunctionCount() const {
     return 0;
 }
 
-std::vector<variable*> variable::getVariables() const {
-    return {variableExists(variableCharacter)};
+std::vector<const variable*> variable::getVariables() const {
+    return {this};
 }
 
-variable* variable::variableExists(const char p_variableCharacter) {
+bool variable::variableExists(const char p_variableCharacter) {
     for (int variable = 0; variable < s_allVariables.size(); variable++) {
-        if (s_allVariables[variable]->variableCharacter == p_variableCharacter)
-            return s_allVariables[variable];
+        if (s_allVariables[variable] == p_variableCharacter)
+            return true;
     }
-    return nullptr;
+    return false;
+}
+
+
+bool variable::operator==(const variable &p_other) const {
+    return variableCharacter == p_other.variableCharacter;
+}
+
+bool variable::operator!=(const variable &p_other) const {
+    return variableCharacter != p_other.variableCharacter;
 }
