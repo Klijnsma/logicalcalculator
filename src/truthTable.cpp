@@ -150,7 +150,7 @@ void truthTable::print() const {
         columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions;
 
         // Do different things based on whether premise is a variable or an actual truth function.
-        if (currentPremiseTruthFunctions > 0) {
+        if ((*premises)[premise]->isVariable) {
             combinedPremisesString += '(' + currentPremiseString + ')';
             columnSizeDiff[premiseCount] += currentPremiseString.length() - currentPremiseTruthFunctions + 1;
             truthFunctions += currentPremiseTruthFunctions;
@@ -164,6 +164,7 @@ void truthTable::print() const {
         columnSizeDiff[premiseCount] += 3;
     }
 
+    // Remove trailing " ∧ ".
     combinedPremisesString = combinedPremisesString.substr(0, combinedPremisesString.length() - 5);
     columnSizeDiff[premiseCount] -= 3;
 
@@ -188,6 +189,7 @@ void truthTable::print() const {
     std::cout << conclusionString << " | ";
     columnSizeDiff[premiseCount + 1] = conclusionString.length() - 2 - conclusion->getTruthFunctionCount();
 
+    // Print validity column truth function.
     std::cout << combinedPremisesString << " → ";
     if (conclusion->isVariable)
         std::cout << conclusionString << '\n';
