@@ -14,6 +14,8 @@ namespace csvParsing {
         std::array<symbol*, 2> foundParameters;
         int parameterCount = 0;
 
+        truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks);
+
         for (int block = 0; block < p_parameterBlocks.size() && parameterCount < 2; block++) {
             if (p_parameterBlocks[block].length() == 1) { // p_parameterBlocks[block] is a variable
                 foundParameters[parameterCount] = new variable(p_parameterBlocks[block][0]);
@@ -21,22 +23,7 @@ namespace csvParsing {
                 parameterCount++;
             }
             else {
-                std::vector<std::string> nextParameterBlocks = p_parameterBlocks;
-                nextParameterBlocks.erase(nextParameterBlocks.begin());
-                const std::array<symbol*, 2> parameters = extractParameters(nextParameterBlocks);
-
-                if (p_parameterBlocks[block] == "conjunction")
-                    foundParameters[parameterCount] = new conjunction(parameters[0], parameters[1]);
-                if (p_parameterBlocks[block] == "exclusive disjunction")
-                    foundParameters[parameterCount] = new exclusiveDisjunction(parameters[0], parameters[1]);
-                if (p_parameterBlocks[block] == "inclusive disjunction")
-                    foundParameters[parameterCount] = new inclusiveDisjunction(parameters[0], parameters[1]);
-                if (p_parameterBlocks[block] == "material equivalence")
-                    foundParameters[parameterCount] = new materialEquivalence(parameters[0], parameters[1]);
-                if (p_parameterBlocks[block] == "material implication")
-                    foundParameters[parameterCount] = new materialImplication(parameters[0], parameters[1]);
-                else
-                    throw std::invalid_argument("Did not recognize truth function type of input longer than one character.");
+                foundParameters[parameterCount] = extractTruthFunction(p_parameterBlocks);
 
                 // Skip the blocks that belong to the truth function just extracted.
                 // The truth function's block is dealt with in the for loop statement.
@@ -52,25 +39,22 @@ namespace csvParsing {
     }
 
     truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks) {
-        if (csvBlocks[0].length() > 1) {
-            std::vector<std::string> parameterBlocks = csvBlocks;
-            parameterBlocks.erase(parameterBlocks.begin());
-            const std::array<symbol*, 2> parameters = extractParameters(parameterBlocks);
+        std::vector<std::string> parameterBlocks = csvBlocks;
+        parameterBlocks.erase(parameterBlocks.begin());
+        const std::array<symbol*, 2> parameters = extractParameters(parameterBlocks);
 
-            if (csvBlocks[0] == "conjunction")
-                return new conjunction(parameters[0], parameters[1]);
-            if (csvBlocks[0] == "exclusive disjunction")
-                return new exclusiveDisjunction(parameters[0], parameters[1]);
-            if (csvBlocks[0] == "inclusive disjunction")
-                return new inclusiveDisjunction(parameters[0], parameters[1]);
-            if (csvBlocks[0] == "material equivalence")
-                return new materialEquivalence(parameters[0], parameters[1]);
-            if (csvBlocks[0] == "material implication")
-                return new materialImplication(parameters[0], parameters[1]);
+        if (csvBlocks[0] == "conjunction")
+            return new conjunction(parameters[0], parameters[1]);
+        if (csvBlocks[0] == "exclusive disjunction")
+            return new exclusiveDisjunction(parameters[0], parameters[1]);
+        if (csvBlocks[0] == "inclusive disjunction")
+            return new inclusiveDisjunction(parameters[0], parameters[1]);
+        if (csvBlocks[0] == "material equivalence")
+            return new materialEquivalence(parameters[0], parameters[1]);
+        if (csvBlocks[0] == "material implication")
+            return new materialImplication(parameters[0], parameters[1]);
 
-            throw std::invalid_argument("Did not recognize truth function type of input longer than one character.");
-        }
-        throw std::invalid_argument("Lines must either contain a solitary variable or start with a truth function name");
+        throw std::invalid_argument("Did not recognize truth function type of input longer than one character.");
     }
 
     symbol* getSymbol(std::ifstream& csvFile) {
