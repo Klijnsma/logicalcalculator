@@ -17,16 +17,16 @@ private:
     int variableCount;
     int premiseCount;
 
-    std::vector<symbol*> premises;
-    const symbol* conclusion;
+    std::vector<symbol*> m_premises;
+    const symbol* m_conclusion;
     std::vector<const variable*> m_variables;
 
     // Storage for the actual truth table truth values.
-    bool** variableCombinations;
-    bool** premiseResults;
-    bool* combinedPremiseResults;
-    bool* conclusionTruth;
-    bool* conclusionFollowsFromPremises;
+    bool** m_variableColumns;
+    bool** m_premiseColumns;
+    bool* m_combinedPremisesColumn;
+    bool* m_conclusionColumn;
+    bool* m_validityColumn;
 
     bool validity;
 };
