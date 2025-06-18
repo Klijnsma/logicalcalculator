@@ -150,7 +150,7 @@ void truthTable::print() const {
         columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions;
 
         // Do different things based on whether premise is a variable or an actual truth function.
-        if ((*premises)[premise]->isVariable) {
+        if (!(*premises)[premise]->isVariable) {
             combinedPremisesString += '(' + currentPremiseString + ')';
             columnSizeDiff[premiseCount] += currentPremiseString.length() - currentPremiseTruthFunctions + 1;
             truthFunctions += currentPremiseTruthFunctions;
