@@ -1,5 +1,6 @@
 #include <array>
 #include <fstream>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -9,6 +10,18 @@
 #include "variable.hpp"
 
 namespace csvParsing {
+
+    struct data {
+        std::vector<symbol*> premises;
+        symbol* conclusion;
+
+        ~data() {
+            for (int premise = 0; premise < premises.size(); premise++) {
+                delete premises[premise];
+            }
+            delete conclusion;
+        }
+    };
 
     std::array<symbol*, 2> extractParameters(const std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
@@ -84,6 +97,23 @@ namespace csvParsing {
         }
 
         return extractTruthFunction(blocks);
+    }
+
+    std::unique_ptr<data> parseFile(const std::string& p_filePath) {
+        std::ifstream csv(p_filePath);
+        std::unique_ptr<data> parsedData = std::make_unique<data>();
+
+        while (!csv.eof()) {
+            parsedData->premises.push_back(csvParsing::getSymbol(csv));
+            if (parsedData->premises.back() == nullptr) {
+                parsedData->conclusion = csvParsing::getSymbol(csv);
+                parsedData->premises.pop_back();
+                break;
+            }
+        }
+        csv.close();
+
+        return parsedData;
     }
 
 }
