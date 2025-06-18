@@ -11,17 +11,12 @@
 
 namespace csvParsing {
 
-    struct data {
-        std::vector<symbol*> premises;
-        symbol* conclusion;
-
-        ~data() {
-            for (int premise = 0; premise < premises.size(); premise++) {
-                delete premises[premise];
-            }
-            delete conclusion;
+    data::~data() {
+        for (int premise = 0; premise < premises.size(); premise++) {
+            delete premises[premise];
         }
-    };
+        delete conclusion;
+    }
 
     std::array<symbol*, 2> extractParameters(const std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
@@ -70,7 +65,7 @@ namespace csvParsing {
         throw std::invalid_argument("Did not recognize truth function type of input longer than one character.");
     }
 
-    symbol* getSymbol(std::ifstream& csvFile) {
+    symbol* parseLine(std::ifstream& csvFile) {
         std::string symbolText;
         std::getline(csvFile, symbolText);
         if (symbolText.length() == 1)
@@ -104,9 +99,9 @@ namespace csvParsing {
         std::unique_ptr<data> parsedData = std::make_unique<data>();
 
         while (!csv.eof()) {
-            parsedData->premises.push_back(csvParsing::getSymbol(csv));
+            parsedData->premises.push_back(csvParsing::parseLine(csv));
             if (parsedData->premises.back() == nullptr) {
-                parsedData->conclusion = csvParsing::getSymbol(csv);
+                parsedData->conclusion = csvParsing::parseLine(csv);
                 parsedData->premises.pop_back();
                 break;
             }

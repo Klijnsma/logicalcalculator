@@ -5,7 +5,7 @@ class variable;
 
 class truthTable {
 public:
-    truthTable(const std::vector<const symbol*>* p_premises, const symbol* p_conclusion);
+    truthTable(const std::vector<symbol*>& p_premises, const symbol* p_conclusion);
     ~truthTable();
 
     bool getTruthValue(const variable* variable, int row) const;
@@ -17,7 +17,7 @@ private:
     int variableCount;
     int premiseCount;
 
-    const std::vector<const symbol*>* premises;
+    std::vector<symbol*> premises;
     const symbol* conclusion;
     std::vector<const variable*> m_variables;
 

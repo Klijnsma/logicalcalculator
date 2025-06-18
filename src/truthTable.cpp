@@ -7,11 +7,11 @@
 #include "truthTable.hpp"
 #include "variable.hpp"
 
-truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbol* p_conclusion) {
+truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_conclusion) {
 
     // Add the pointers to variables from p_premises to m_variables, avoiding any duplicates.
-    for (int premise = 0; premise < p_premises->size(); premise++) {
-        const std::vector<const variable*> premiseVariables = (*p_premises)[premise]->getVariables();
+    for (int premise = 0; premise < p_premises.size(); premise++) {
+        const std::vector<const variable*> premiseVariables = p_premises[premise]->getVariables();
 
         // For every variable in premiseVariables, cycle through m_variables and check whether they are already stored in there.
         for (int currentPremiseVariable = 0; currentPremiseVariable < premiseVariables.size(); currentPremiseVariable++) {
@@ -49,9 +49,9 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
     }
 
     variableCount = m_variables.size();
-    columns = variableCount + p_premises->size() + 3;
+    columns = variableCount + p_premises.size() + 3;
     rows = std::pow(2, variableCount);
-    premiseCount = p_premises->size();
+    premiseCount = p_premises.size();
 
     premises = p_premises;
     conclusion = p_conclusion;
@@ -72,15 +72,15 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
         }
     }
 
-    premiseResults = new bool*[p_premises->size()];
+    premiseResults = new bool*[p_premises.size()];
 
     // Calculate the results of the premises in each row.
-    for (int currentPremise = 0; currentPremise < p_premises->size(); currentPremise++) {
+    for (int currentPremise = 0; currentPremise < p_premises.size(); currentPremise++) {
         premiseResults[currentPremise] = new bool[rows];
 
         for (int currentRow = 0; currentRow < rows; currentRow++) {
             // Dealing with truthFunctions inside truthFunctions is dealt with by the calculate() 4function.
-            premiseResults[currentPremise][currentRow] = (*p_premises)[currentPremise]->calculate(this, currentRow);
+            premiseResults[currentPremise][currentRow] = p_premises[currentPremise]->calculate(this, currentRow);
         }
     }
 
@@ -95,13 +95,13 @@ truthTable::truthTable(const std::vector<const symbol*>* p_premises, const symbo
     for (int currentRow = 0; currentRow < rows; currentRow++) {
         int currentPremise = 0;
 
-        for (; currentPremise < p_premises->size(); currentPremise++) {
+        for (; currentPremise < p_premises.size(); currentPremise++) {
             if (!premiseResults[currentPremise][currentRow]) {
                 combinedPremiseResults[currentRow] = false;
                break;
             }
         }
-        if (currentPremise == p_premises->size())
+        if (currentPremise == p_premises.size())
             combinedPremiseResults[currentRow] = true;
 
         conclusionTruth[currentRow] = p_conclusion->calculate(this, currentRow);
@@ -144,13 +144,13 @@ void truthTable::print() const {
 
     // Print the premises as strings and begin preparing for printing combinedPremises.
     for (int premise = 0; premise < premiseCount; premise++) {
-        std::string currentPremiseString = (*premises)[premise]->getString();
+        std::string currentPremiseString = premises[premise]->getString();
         std::cout << currentPremiseString << " | ";
-        int currentPremiseTruthFunctions = (*premises)[premise]->getTruthFunctionCount();
+        int currentPremiseTruthFunctions = premises[premise]->getTruthFunctionCount();
         columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions;
 
         // Do different things based on whether premise is a variable or an actual truth function.
-        if (!(*premises)[premise]->isVariable) {
+        if (!premises[premise]->isVariable) {
             combinedPremisesString += '(' + currentPremiseString + ')';
             columnSizeDiff[premiseCount] += currentPremiseString.length() - currentPremiseTruthFunctions + 1;
             truthFunctions += currentPremiseTruthFunctions;

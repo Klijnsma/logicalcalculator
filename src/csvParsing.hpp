@@ -3,6 +3,13 @@
 
 namespace csvParsing {
 
-    symbol* getSymbol(std::ifstream& csvFile);
+    struct data {
+        std::vector<symbol*> premises;
+        symbol* conclusion;
+
+        ~data();
+    };
+
+    std::unique_ptr<data> parseFile(const std::string& p_filePath);
 
 }

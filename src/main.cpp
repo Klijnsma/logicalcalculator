@@ -7,23 +7,10 @@
 #include "variable.hpp"
 
 int main() {
-    std::ifstream test_file;
-    test_file.open("test.csv");
-    std::vector<const symbol*> premises;
-    symbol* conclusion = nullptr;
+    std::unique_ptr<csvParsing::data> formulae = csvParsing::parseFile("test.csv");
 
-    while (!test_file.eof()) {
-        premises.push_back(csvParsing::getSymbol(test_file));
-        if (premises.back() == nullptr) {
-            conclusion = csvParsing::getSymbol(test_file);
-            premises.pop_back();
-            break;
-        }
-    }
-    test_file.close();
-
-    if (!premises.empty() && conclusion != nullptr) {
-        truthTable wow(&premises, conclusion);
+    if (!formulae->premises.empty() && formulae->conclusion != nullptr) {
+        truthTable wow(formulae->premises, formulae->conclusion);
         wow.print();
     }
 
