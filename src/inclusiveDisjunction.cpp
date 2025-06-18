@@ -38,18 +38,3 @@ bool inclusiveDisjunction::calculate(const truthTable* p_truthTable, const int r
 
     return value1 || value2;
 }
-
-int inclusiveDisjunction::getTruthFunctionCount() const {
-    int truthFunctions = 1;
-
-    if (!items[0]->isVariable) {
-        truthFunctions++;
-        truthFunctions += items[0]->getTruthFunctionCount();
-    }
-    if (!items[1]->isVariable) {
-        truthFunctions++;
-        truthFunctions += items[1]->getTruthFunctionCount();
-    }
-
-    return truthFunctions;
-}

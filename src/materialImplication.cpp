@@ -38,18 +38,3 @@ bool materialImplication::calculate(const truthTable* p_truthTable, const int ro
 
     return !(value1 && !value2);
 }
-
-int materialImplication::getTruthFunctionCount() const {
-    int truthFunctions = 1;
-
-    if (!items[0]->isVariable) {
-        truthFunctions++;
-        truthFunctions += items[0]->getTruthFunctionCount();
-    }
-    if (!items[1]->isVariable) {
-        truthFunctions++;
-        truthFunctions += items[1]->getTruthFunctionCount();
-    }
-
-    return truthFunctions;
-}

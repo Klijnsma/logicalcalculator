@@ -38,18 +38,3 @@ bool conjunction::calculate(const truthTable* p_truthTable, const int row) const
 
     return value1 && value2;
 }
-
-int conjunction::getTruthFunctionCount() const {
-    int truthFunctions = 1;
-
-    if (!items[0]->isVariable) {
-        truthFunctions++;
-        truthFunctions += items[0]->getTruthFunctionCount();
-    }
-    if (!items[1]->isVariable) {
-        truthFunctions++;
-        truthFunctions += items[1]->getTruthFunctionCount();
-    }
-
-    return truthFunctions;
-}
