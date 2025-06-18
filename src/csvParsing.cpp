@@ -16,7 +16,7 @@ namespace csvParsing {
 
         for (int block = 0; block < p_parameterBlocks.size() && parameterCount < 2; block++) {
             if (p_parameterBlocks[block].length() == 1) { // p_parameterBlocks[block] is a variable
-                foundParameters[parameterCount] = new variable(p_parameterBlocks[block][0]); // TODO use smart pointer to avoid memory leak
+                foundParameters[parameterCount] = new variable(p_parameterBlocks[block][0]);
 
                 parameterCount++;
             }

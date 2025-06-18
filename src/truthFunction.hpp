@@ -43,6 +43,11 @@ public:
         return foundVariables;
     }
 
+    ~truthFunction() {
+        delete items[0];
+        delete items[1];
+    }
+
 protected:
     std::vector<symbol*> items;
 };
