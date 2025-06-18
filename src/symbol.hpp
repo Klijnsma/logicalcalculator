@@ -13,6 +13,8 @@ public:
     virtual int getTruthFunctionCount() const = 0;
     virtual std::vector<const variable*> getVariables() const = 0;
 
+    virtual ~symbol() = default;
+
     bool isVariable;
 
 protected:

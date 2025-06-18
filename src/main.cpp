@@ -1,10 +1,5 @@
-#include <fstream>
-#include <iostream>
-
 #include "csvParsing.hpp"
-#include "truthFunction.hpp"
 #include "truthTable.hpp"
-#include "variable.hpp"
 
 int main() {
     std::unique_ptr<csvParsing::data> formulae = csvParsing::parseFile("test.csv");

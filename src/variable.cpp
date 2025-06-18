@@ -1,8 +1,6 @@
-#include "truthFunction.hpp"
+#include "symbol.hpp"
 #include "truthTable.hpp"
 #include "variable.hpp"
-
-#include <vector>
 
 variable::variable(const char p_variableCharacter) {
     int variable = 0;
