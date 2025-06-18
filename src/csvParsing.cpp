@@ -11,13 +11,6 @@
 
 namespace csvParsing {
 
-    data::~data() {
-        for (int premise = 0; premise < premises.size(); premise++) {
-            delete premises[premise];
-        }
-        delete conclusion;
-    }
-
     std::array<symbol*, 2> extractParameters(const std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
         int parameterCount = 0;
@@ -94,9 +87,9 @@ namespace csvParsing {
         return extractTruthFunction(blocks);
     }
 
-    std::unique_ptr<data> parseFile(const std::string& p_filePath) {
+    std::unique_ptr<argumentData> parseFile(const std::string& p_filePath) {
         std::ifstream csv(p_filePath);
-        std::unique_ptr<data> parsedData = std::make_unique<data>();
+        std::unique_ptr<argumentData> parsedData = std::make_unique<argumentData>();
 
         while (!csv.eof()) {
             parsedData->premises.push_back(csvParsing::parseLine(csv));
