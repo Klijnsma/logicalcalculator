@@ -134,7 +134,7 @@ void truthTable::print() const {
 
     // Print the variables as chars.
     for (int variable = 0; variable < variableCount; variable++) {
-        std::cout << (m_variables[variable]->getString()) << " | ";
+        std::cout << (m_variables[variable]->variableCharacter) << " | ";
     }
 
     std::string combinedPremisesString;
@@ -147,7 +147,7 @@ void truthTable::print() const {
         std::string currentPremiseString = m_premises[premise]->getString();
         std::cout << currentPremiseString << " | ";
         int currentPremiseTruthFunctions = m_premises[premise]->getTruthFunctionCount();
-        columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions;
+        columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions + !m_premises[premise]->isPositive;
 
         // Do different things based on whether premise is a variable or an actual truth function.
         if (!m_premises[premise]->isVariable) {
@@ -187,7 +187,7 @@ void truthTable::print() const {
 
     std::string conclusionString = m_conclusion->getString();
     std::cout << conclusionString << " | ";
-    columnSizeDiff[premiseCount + 1] = conclusionString.length() - 2 - m_conclusion->getTruthFunctionCount();
+    columnSizeDiff[premiseCount + 1] = conclusionString.length() - 2 - m_conclusion->getTruthFunctionCount() + !m_conclusion->isPositive;
 
     // Print validity column truth function.
     std::cout << combinedPremisesString << " → ";

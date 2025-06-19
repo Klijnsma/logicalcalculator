@@ -16,6 +16,11 @@ std::string conjunction::getString() const {
     else
         premiseString += '(' + items[1]->getString() + ')';
 
+    if (!isPositive) {
+        premiseString.insert(0, "!(");
+        premiseString += ')';
+    }
+
     return premiseString;
 }
 
@@ -24,17 +29,17 @@ bool conjunction::calculate(const truthTable* p_truthTable, const int row) const
 
     if (items[0]->isVariable)
         // Get the truth value for the char variables in the given row.
-            value1 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(items[0]), row);
+            value1 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(items[0]), row) == items[0]->isPositive;
     else
         // Make sure any nested truthFunctions are calculated first.
             value1 = items[0]->calculate(p_truthTable, row);
 
     if (items[1]->isVariable)
         // Get the truth value for the char variables in the given row.
-            value2 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(items[1]), row);
+            value2 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(items[1]), row) == items[1]->isPositive;
     else
         // Make sure any nested truthFunctions are calculated first.
             value2 = items[1]->calculate(p_truthTable, row);
 
-    return value1 && value2;
+    return (value1 && value2) == isPositive;
 }

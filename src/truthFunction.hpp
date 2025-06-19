@@ -6,7 +6,7 @@ class truthTable;
 
 class truthFunction : public symbol {
 public:
-    truthFunction(symbol* p_item1, symbol* p_item2);
+    truthFunction(symbol* p_item1, symbol* p_item2, bool p_isPositive);
 
     int getTruthFunctionCount() const override;
     std::vector<const variable*> getVariables() const override;

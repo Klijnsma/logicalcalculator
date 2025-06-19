@@ -15,6 +15,7 @@ public:
 
     virtual ~symbol() = default;
 
+    bool isPositive;
     bool isVariable;
 
 protected:
