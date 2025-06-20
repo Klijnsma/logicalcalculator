@@ -1,6 +1,6 @@
 #include "truthFunction.hpp"
 
-truthFunction::truthFunction(symbol* p_item1, symbol* p_item2, bool p_isPositive) {
+truthFunction::truthFunction(symbol* p_item1, symbol* p_item2, const bool p_isPositive) {
     items.push_back(p_item1);
     items.push_back(p_item2);
 

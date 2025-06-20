@@ -1,7 +1,6 @@
 #pragma once
 
 #include "argumentData.hpp"
-#include "symbol.hpp"
 
 namespace csvParsing {
 

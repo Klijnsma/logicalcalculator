@@ -2,7 +2,7 @@
 #include "truthTable.hpp"
 #include "variable.hpp"
 
-variable::variable(const char p_variableCharacter, bool positivity) {
+variable::variable(const char p_variableCharacter, const bool p_isPositive) {
     int variable = 0;
     for ( ; variable < s_allVariables.size(); variable++) {
         if (s_allVariables[variable] == p_variableCharacter) {
@@ -17,7 +17,7 @@ variable::variable(const char p_variableCharacter, bool positivity) {
         variableCharacter = const_cast<const char&>(variableCharacter);
     }
 
-    isPositive = positivity;
+    isPositive = p_isPositive;
     isPositive = const_cast<const bool&>(isPositive);
 
     isVariable = true;
