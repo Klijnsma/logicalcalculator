@@ -1,4 +1,5 @@
 material implication,p,q
-!q
+material implication,r,q
+p
 conclusion
-!p
+r

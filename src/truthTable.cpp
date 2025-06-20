@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <future>
 #include <iostream>
 #include <stdexcept>
 
@@ -58,26 +59,36 @@ truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_c
 
     m_table = new bool[columns * rows];
 
-    // Calculate every possible truth value combination for the given amount of variables and store them in possibleTruthValues.
+    // Calculate every possible truth value combination for the given amount of variables and store them in the first variableCount columns of m_table.
     for (int variable = 0; variable < variableCount; variable++) {
         const int blockSize = rows / std::pow(2, variable + 1);
         bool truthValue = true;
 
         for (int block = 0; block < rows / blockSize; block++) {
             // Alternate the boolean value for the variable being worked on.
-            std::fill(&m_table[variable + block * blockSize],
-                      &m_table[variable + (block + 1) * blockSize], truthValue);
+            fillColumnBlock(variable, block * blockSize, blockSize, truthValue);
             truthValue = !truthValue;
         }
+
+        std::cout << "Initialized variable " << variable << '\n';
     }
 
+    std::cout << "Initialized variables" << '\n';
+
+    std::future<void>* premiseCalculations = new std::future<void>[premiseCount];
+
+    std::cout << "made premiseCalculations array\n";
+
     // Calculate the results of the premises in each row.
-    for (int currentPremise = 0; currentPremise < premiseCount; currentPremise++) {
-        for (int currentRow = 0; currentRow < rows; currentRow++) {
-            // Dealing with truthFunctions inside truthFunctions is done by the calculate() function.
-            m_table[(currentPremise + variableCount) + (currentRow * columns)] = p_premises[currentPremise]->calculate(this, currentRow);
-        }
+    for (unsigned int currentPremise = 0; currentPremise < premiseCount; currentPremise++) {
+        premiseCalculations[currentPremise] = std::async(std::launch::async, calculatePremise, this, currentPremise);
     }
+
+    for (unsigned int currentPremise = 0; currentPremise < premiseCount; currentPremise++) {
+        premiseCalculations[currentPremise].wait();
+    }
+
+    delete[] premiseCalculations;
 
     int followingConclusions = 0;
 
@@ -103,13 +114,36 @@ truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_c
         m_table[(variableCount + premiseCount + 2) + (currentRow * columns)] = !(m_table[(variableCount + premiseCount) + (currentRow * columns)] && !m_table[(variableCount + premiseCount + 1) + (currentRow * columns)]);
         if (m_table[(variableCount + premiseCount + 2) + (currentRow * columns)])
             followingConclusions++;
+
     }
 
     if (followingConclusions == rows) {
         validity = true;
+        std::cout << "valid\n";
+
         return;
     }
     validity = false;
+    std::cout << "invalid\n";
+}
+
+truthTable::~truthTable() {
+    delete[] m_table;
+}
+
+void truthTable::calculatePremise(const truthTable* p_truthTable, const unsigned int p_premiseNumber) {
+    for (int currentRow = 0; currentRow < p_truthTable->rows; currentRow++) {
+        // Dealing with truthFunctions inside truthFunctions is done by the calculate() function.
+        p_truthTable->m_table[(p_premiseNumber + p_truthTable->variableCount) + (currentRow * p_truthTable->columns)] = p_truthTable->m_premises[p_premiseNumber]->calculate(p_truthTable, currentRow);
+    }
+
+    std::cout << "Initialized premise " << p_premiseNumber << '\n';
+}
+
+void truthTable::fillColumnBlock(const unsigned int p_variable, const unsigned int p_firstRow, const unsigned int p_blockSize, const bool p_truthValue) const {
+    for (int currentRow = p_firstRow; currentRow < p_firstRow + p_blockSize; currentRow++) {
+        m_table[p_variable + currentRow * columns] = p_truthValue;
+    }
 }
 
 bool truthTable::getTruthValue(const variable* p_variable, const int p_row) const {
@@ -204,8 +238,4 @@ void truthTable::print() const {
     }
 
     delete[] columnSizeDiff;
-}
-
-truthTable::~truthTable() {
-    delete[] m_table;
 }
