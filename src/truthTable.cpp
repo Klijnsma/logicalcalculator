@@ -69,15 +69,9 @@ truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_c
             fillColumnBlock(variable, block * blockSize, blockSize, truthValue);
             truthValue = !truthValue;
         }
-
-        std::cout << "Initialized variable " << variable << '\n';
     }
 
-    std::cout << "Initialized variables" << '\n';
-
     std::future<void>* premiseCalculations = new std::future<void>[premiseCount];
-
-    std::cout << "made premiseCalculations array\n";
 
     // Calculate the results of the premises in each row.
     for (unsigned int currentPremise = 0; currentPremise < premiseCount; currentPremise++) {
@@ -119,12 +113,9 @@ truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_c
 
     if (followingConclusions == rows) {
         validity = true;
-        std::cout << "valid\n";
-
         return;
     }
     validity = false;
-    std::cout << "invalid\n";
 }
 
 truthTable::~truthTable() {
@@ -136,8 +127,6 @@ void truthTable::calculatePremise(const truthTable* p_truthTable, const unsigned
         // Dealing with truthFunctions inside truthFunctions is done by the calculate() function.
         p_truthTable->m_table[(p_premiseNumber + p_truthTable->variableCount) + (currentRow * p_truthTable->columns)] = p_truthTable->m_premises[p_premiseNumber]->calculate(p_truthTable, currentRow);
     }
-
-    std::cout << "Initialized premise " << p_premiseNumber << '\n';
 }
 
 void truthTable::fillColumnBlock(const unsigned int p_variable, const unsigned int p_firstRow, const unsigned int p_blockSize, const bool p_truthValue) const {
