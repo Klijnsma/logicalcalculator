@@ -49,65 +49,59 @@ truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_c
     }
 
     variableCount = m_variables.size();
-    columns = variableCount + p_premises.size() + 3;
-    rows = std::pow(2, variableCount);
     premiseCount = p_premises.size();
+    columns = variableCount + premiseCount + 3; // 3 columns total for combined premises, conclusion and validity.
+    rows = std::pow(2, variableCount);
 
     m_premises = p_premises;
     m_conclusion = p_conclusion;
 
-    m_variableColumns = new bool*[variableCount];
+    m_table = new bool[columns * rows];
 
     // Calculate every possible truth value combination for the given amount of variables and store them in possibleTruthValues.
     for (int variable = 0; variable < variableCount; variable++) {
-        m_variableColumns[variable] = new bool[rows];
         const int blockSize = rows / std::pow(2, variable + 1);
         bool truthValue = true;
 
         for (int block = 0; block < rows / blockSize; block++) {
             // Alternate the boolean value for the variable being worked on.
-            std::fill(&m_variableColumns[variable][block * blockSize],
-                      &m_variableColumns[variable][block * blockSize + blockSize], truthValue);
+            std::fill(&m_table[variable + block * blockSize],
+                      &m_table[variable + (block + 1) * blockSize], truthValue);
             truthValue = !truthValue;
         }
     }
 
-    m_premiseColumns = new bool*[p_premises.size()];
-
     // Calculate the results of the premises in each row.
-    for (int currentPremise = 0; currentPremise < p_premises.size(); currentPremise++) {
-        m_premiseColumns[currentPremise] = new bool[rows];
-
+    for (int currentPremise = 0; currentPremise < premiseCount; currentPremise++) {
         for (int currentRow = 0; currentRow < rows; currentRow++) {
-            // Dealing with truthFunctions inside truthFunctions is dealt with by the calculate() 4function.
-            m_premiseColumns[currentPremise][currentRow] = p_premises[currentPremise]->calculate(this, currentRow);
+            // Dealing with truthFunctions inside truthFunctions is done by the calculate() function.
+            m_table[(currentPremise + variableCount) + (currentRow * columns)] = p_premises[currentPremise]->calculate(this, currentRow);
         }
     }
-
-    m_combinedPremisesColumn = new bool[rows];
-    m_conclusionColumn = new bool[rows];
-    m_validityColumn = new bool[rows];
 
     int followingConclusions = 0;
 
     // Calculate for each row whether all premises are true, whether the conclusion is true
     // and whether the conclusion is materially implied by the premises.
     for (int currentRow = 0; currentRow < rows; currentRow++) {
-        int currentPremise = 0;
 
-        for (; currentPremise < p_premises.size(); currentPremise++) {
-            if (!m_premiseColumns[currentPremise][currentRow]) {
-                m_combinedPremisesColumn[currentRow] = false;
+        // Combined premises
+        int currentPremise = 0;
+        for (; currentPremise < premiseCount; currentPremise++) {
+            if (!m_table[(currentPremise + variableCount) + (currentRow * columns)]) {
+                m_table[(variableCount + premiseCount) + (currentRow * columns)] = false;
                break;
             }
         }
-        if (currentPremise == p_premises.size())
-            m_combinedPremisesColumn[currentRow] = true;
+        if (currentPremise == premiseCount)
+            m_table[(variableCount + premiseCount) + (currentRow * columns)] = true;
 
-        m_conclusionColumn[currentRow] = p_conclusion->calculate(this, currentRow);
+        // Conclusion
+        m_table[(variableCount + premiseCount + 1) + (currentRow * columns)] = p_conclusion->calculate(this, currentRow);
 
-        m_validityColumn[currentRow] = !(m_combinedPremisesColumn[currentRow] && !m_conclusionColumn[currentRow]);
-        if (m_validityColumn[currentRow])
+        // Validity
+        m_table[(variableCount + premiseCount + 2) + (currentRow * columns)] = !(m_table[(variableCount + premiseCount) + (currentRow * columns)] && !m_table[(variableCount + premiseCount + 1) + (currentRow * columns)]);
+        if (m_table[(variableCount + premiseCount + 2) + (currentRow * columns)])
             followingConclusions++;
     }
 
@@ -118,10 +112,10 @@ truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_c
     validity = false;
 }
 
-bool truthTable::getTruthValue(const variable* variable, const int row) const {
+bool truthTable::getTruthValue(const variable* p_variable, const int p_row) const {
     for (int variableNumber = 0; variableNumber < variableCount; variableNumber++) {
-        if (*m_variables[variableNumber] == *variable) {
-            return m_variableColumns[variableNumber][row];
+        if (m_variables[variableNumber]->variableCharacter == p_variable->variableCharacter) {
+            return m_table[variableNumber + p_row * columns];
         }
     }
 
@@ -129,8 +123,8 @@ bool truthTable::getTruthValue(const variable* variable, const int row) const {
 }
 
 void truthTable::print() const {
-    int columnSizeDiff[premiseCount + 2]; // Only premises, combined premises and conclusion rows need column size to be remembered.
-    // column Size does not include the size of the " | " seperator
+    int* columnSizeDiff = new int[premiseCount + 2]; // Only premises, combined premises and conclusion rows need column size to be remembered.
+    // column Size does not include the size of the " | " seperator.
 
     // Print the variables as chars.
     for (int variable = 0; variable < variableCount; variable++) {
@@ -199,29 +193,19 @@ void truthTable::print() const {
     // Print the truth values
     for (int currentRow = 0; currentRow < rows; currentRow++) {
         for (int variable = 0; variable < variableCount; variable++) {
-            std::cout << m_variableColumns[variable][currentRow] << " | ";
+            std::cout << m_table[variable + currentRow * columns] << " | ";
         }
         for (int premise = 0; premise < premiseCount; premise++) {
-            std::cout << m_premiseColumns[premise][currentRow] << std::string(std::max(columnSizeDiff[premise], 0), ' ') << " | ";
+            std::cout << m_table[(premise + variableCount) + (currentRow * columns)] << std::string(std::max(columnSizeDiff[premise], 0), ' ') << " | ";
         }
-        std::cout << m_combinedPremisesColumn[currentRow] << std::string(std::max(columnSizeDiff[premiseCount], 0), ' ') << " | ";
-        std::cout << m_conclusionColumn[currentRow] << std::string(std::max(columnSizeDiff[premiseCount + 1], 0), ' ') << " | ";
-        std::cout << m_validityColumn[currentRow] << '\n';
+        std::cout << m_table[(variableCount + premiseCount) + (currentRow * columns)] << std::string(std::max(columnSizeDiff[premiseCount], 0), ' ') << " | ";
+        std::cout << m_table[(variableCount + premiseCount + 1) + (currentRow * columns)] << std::string(std::max(columnSizeDiff[premiseCount + 1], 0), ' ') << " | ";
+        std::cout << m_table[(variableCount + premiseCount + 2) + (currentRow * columns)] << '\n';
     }
+
+    delete[] columnSizeDiff;
 }
 
 truthTable::~truthTable() {
-    for (int variable = 0; variable < variableCount; variable++) {
-        delete[] m_variableColumns[variable];
-    }
-    delete[] m_variableColumns;
-
-    for (int premise = 0; premise < premiseCount; premise++) {
-        delete[] m_premiseColumns[premise];
-    }
-    delete[] m_premiseColumns;
-
-    delete[] m_combinedPremisesColumn;
-    delete[] m_conclusionColumn;
-    delete[] m_validityColumn;
+    delete[] m_table;
 }

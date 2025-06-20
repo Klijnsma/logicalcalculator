@@ -70,7 +70,7 @@ namespace csvParsing {
         std::string symbolText;
         std::getline(csvFile, symbolText);
 
-        bool positive = symbolText[0] != '!';
+        const bool positive = symbolText[0] != '!';
 
         if (!positive)
             symbolText.erase(0, 1);

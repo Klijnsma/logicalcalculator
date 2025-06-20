@@ -22,11 +22,7 @@ private:
     std::vector<const variable*> m_variables;
 
     // Storage for the actual truth table truth values.
-    bool** m_variableColumns;
-    bool** m_premiseColumns;
-    bool* m_combinedPremisesColumn;
-    bool* m_conclusionColumn;
-    bool* m_validityColumn;
+    bool* m_table;
 
     bool validity;
 };
