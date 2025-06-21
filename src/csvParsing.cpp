@@ -14,7 +14,7 @@ namespace csvParsing {
     // Declare function beforehand so extractParameters can use it.
     truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks, bool p_positive);
 
-    std::array<symbol*, 2> extractParameters(std::vector<std::string>& p_parameterBlocks) {
+    static std::array<symbol*, 2> extractParameters(std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
         int parameterCount = 0;
 
@@ -47,7 +47,7 @@ namespace csvParsing {
         throw std::invalid_argument("Could not parse line into truth function parameters.");
     }
 
-    truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks, bool p_positive) {
+    static truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks, const bool p_positive) {
         std::vector<std::string> parameterBlocks = csvBlocks;
         parameterBlocks.erase(parameterBlocks.begin());
         const std::array<symbol*, 2> parameters = extractParameters(parameterBlocks);
@@ -66,7 +66,7 @@ namespace csvParsing {
         throw std::invalid_argument("Did not recognize truth function type of input longer than one character.");
     }
 
-    symbol* parseLine(std::ifstream& csvFile) {
+    static symbol* parseLine(std::ifstream& csvFile) {
         std::string symbolText;
         std::getline(csvFile, symbolText);
 
@@ -106,9 +106,9 @@ namespace csvParsing {
         std::unique_ptr<argumentData> parsedData = std::make_unique<argumentData>();
 
         while (!csv.eof()) {
-            parsedData->premises.push_back(csvParsing::parseLine(csv));
+            parsedData->premises.push_back(parseLine(csv));
             if (parsedData->premises.back() == nullptr) {
-                parsedData->conclusion = csvParsing::parseLine(csv);
+                parsedData->conclusion = parseLine(csv);
                 parsedData->premises.pop_back();
                 break;
             }
