@@ -12,7 +12,7 @@
 namespace csvParsing {
 
     // Declare function beforehand so extractParameters can use it.
-    truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks, bool p_positive);
+    static truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks, bool p_positive);
 
     static std::array<symbol*, 2> extractParameters(std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
