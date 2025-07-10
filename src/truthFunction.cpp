@@ -14,14 +14,10 @@ truthFunction::truthFunction(symbol* p_item1, symbol* p_item2, const bool p_isPo
 int truthFunction::getTruthFunctionCount() const {
     int truthFunctions = 1;
 
-    if (!items[0]->isVariable) {
-        truthFunctions++;
+    if (!items[0]->isVariable)
         truthFunctions += items[0]->getTruthFunctionCount();
-    }
-    if (!items[1]->isVariable) {
-        truthFunctions++;
+    if (!items[1]->isVariable)
         truthFunctions += items[1]->getTruthFunctionCount();
-    }
 
     return truthFunctions;
 }
