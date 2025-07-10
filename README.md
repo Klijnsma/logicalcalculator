@@ -22,7 +22,7 @@ or
 ## Csv formatting
 The csv file can only use commas as separators. The lines should be filled in like this:
 
-    [truth function name],[parameter 1],[parameter 2]
+    [truth function keyword],[parameter 1],[parameter 2]
 for truth functions and
 
     [variable name]
