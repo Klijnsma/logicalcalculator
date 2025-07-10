@@ -1,5 +1,6 @@
 #include <array>
 #include <fstream>
+#include <locale>
 #include <memory>
 #include <stdexcept>
 #include <vector>
@@ -11,17 +12,22 @@
 
 namespace csvParsing {
 
+    static std::string lowercaseString(std::string p_input) {
+        for (int character = 0; character < p_input.length(); character++) {
+            p_input[character] = std::tolower(p_input[character], std::locale());
+        }
+        return p_input;
+    }
+
     // Declare function beforehand so extractParameters can use it.
     static truthFunction* extractTruthFunction(const std::vector<std::string>& csvBlocks, bool p_positive);
 
     static std::array<symbol*, 2> extractParameters(std::vector<std::string>& p_parameterBlocks) {
         std::array<symbol*, 2> foundParameters;
-        int parameterCount = 0;
-
         bool positive;
 
+        int parameterCount = 0;
         for (int block = 0; block < p_parameterBlocks.size() && parameterCount < 2; block++) {
-
             positive = p_parameterBlocks[block][0] != '!';
             if (!positive)
                 p_parameterBlocks[block].erase(0, 1);
@@ -35,7 +41,7 @@ namespace csvParsing {
                 foundParameters[parameterCount] = extractTruthFunction(p_parameterBlocks, positive);
 
                 // Skip the blocks that belong to the truth function just extracted.
-                // The truth function's block is dealt with in the for loop statement.
+                // The truth function keyword's block is dealt with in the for loop statement.
                 block += 2 * foundParameters[parameterCount]->getTruthFunctionCount();
 
                 parameterCount++;
@@ -52,15 +58,18 @@ namespace csvParsing {
         parameterBlocks.erase(parameterBlocks.begin());
         const std::array<symbol*, 2> parameters = extractParameters(parameterBlocks);
 
-        if (csvBlocks[0] == "conjunction")
+        // Allow case-insensitive truth function keyword input
+        const std::string truthFunctionKeyword = lowercaseString(csvBlocks[0]);
+
+        if (truthFunctionKeyword == "conjunction")
             return new conjunction(parameters[0], parameters[1], p_positive);
-        if (csvBlocks[0] == "exclusive disjunction")
+        if (truthFunctionKeyword == "exclusive disjunction")
             return new exclusiveDisjunction(parameters[0], parameters[1], p_positive);
-        if (csvBlocks[0] == "inclusive disjunction")
+        if (truthFunctionKeyword == "inclusive disjunction" || truthFunctionKeyword == "disjunction")
             return new inclusiveDisjunction(parameters[0], parameters[1], p_positive);
-        if (csvBlocks[0] == "material equivalence")
+        if (truthFunctionKeyword == "material equivalence" || truthFunctionKeyword == "material biconditional" || truthFunctionKeyword == "biconditional")
             return new materialEquivalence(parameters[0], parameters[1], p_positive);
-        if (csvBlocks[0] == "material implication")
+        if (truthFunctionKeyword == "material implication")
             return new materialImplication(parameters[0], parameters[1], p_positive);
 
         throw std::invalid_argument("Did not recognize truth function type of input longer than one character.");
@@ -78,7 +87,7 @@ namespace csvParsing {
         if (symbolText.length() == 1)
             return new variable(symbolText[0], positive);
 
-        if (symbolText == "conclusion")
+        if (lowercaseString(symbolText) == "conclusion")
             return nullptr;
 
         // Retrieve blocks as strings.

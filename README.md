@@ -26,12 +26,18 @@ The csv file can only use commas as separators. The lines should be filled in li
 for truth functions and
 
     [variable name]
-for variables. Currently, variable names can only be one character long
+for variables. Variable names are case-sensitive, while all other text is not. Currently, variable names can only be one character long.
+
+The following truth function keywords are recognized:
+
+    conjunction
+    exclusive disjunction
+    inclusive disjunction or disjunction
+    material equivalence, material biconditional or biconditional
+    material implication
 
 Truth function parameters can be both truth functions and variables.
 If a truth function is used it will have two parameters as well, which should be placed in the next two fields, before the parent truth function's next parameter.
 
 After all the premises, there must be a line containing nothing but 'conclusion' to indicate that the following line is the conclusion. 
 The conclusion can currently only be one line, and is formatted the same way as the premises.
-
-Please note that all text is case-sensitive
