@@ -38,7 +38,11 @@ namespace csvParsing {
                 parameterCount++;
             }
             else {
-                foundParameters[parameterCount] = extractTruthFunction(p_parameterBlocks, positive);
+                std::vector<std::string> unparsedBlocks(p_parameterBlocks.size() - block);
+                for (int parameterBlock = block; parameterBlock < p_parameterBlocks.size(); parameterBlock++) {
+                    unparsedBlocks[parameterBlock - block] = p_parameterBlocks[parameterBlock];
+                }
+                foundParameters[parameterCount] = extractTruthFunction(unparsedBlocks, positive);
 
                 // Skip the blocks that belong to the truth function just extracted.
                 // The truth function keyword's block is dealt with in the for loop statement.
