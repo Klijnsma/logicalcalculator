@@ -1,8 +1,8 @@
 #include "truthFunction.hpp"
 
 truthFunction::truthFunction(symbol* p_item1, symbol* p_item2, const bool p_isPositive) {
-    items.push_back(p_item1);
-    items.push_back(p_item2);
+    m_items.push_back(p_item1);
+    m_items.push_back(p_item2);
 
     isPositive = p_isPositive;
     isPositive = const_cast<const bool&>(isPositive);
@@ -14,10 +14,10 @@ truthFunction::truthFunction(symbol* p_item1, symbol* p_item2, const bool p_isPo
 int truthFunction::getTruthFunctionCount() const {
     int truthFunctions = 1;
 
-    if (!items[0]->isVariable)
-        truthFunctions += items[0]->getTruthFunctionCount();
-    if (!items[1]->isVariable)
-        truthFunctions += items[1]->getTruthFunctionCount();
+    if (!m_items[0]->isVariable)
+        truthFunctions += m_items[0]->getTruthFunctionCount();
+    if (!m_items[1]->isVariable)
+        truthFunctions += m_items[1]->getTruthFunctionCount();
 
     return truthFunctions;
 }
@@ -25,18 +25,18 @@ int truthFunction::getTruthFunctionCount() const {
 std::vector<const variable*> truthFunction::getVariables() const {
     std::vector<const variable*> foundVariables;
 
-    if (items[0]->isVariable)
-        foundVariables.push_back(reinterpret_cast<variable*>(items[0]));
+    if (m_items[0]->isVariable)
+        foundVariables.push_back(reinterpret_cast<variable*>(m_items[0]));
     else {
-        std::vector<const variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[0])->getVariables();
+        std::vector<const variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(m_items[0])->getVariables();
         foundVariables.reserve(singleParametersVariables.size());
         foundVariables.insert(foundVariables.end(), singleParametersVariables.begin(), singleParametersVariables.end());
     }
 
-    if (items[1]->isVariable)
-        foundVariables.push_back(reinterpret_cast<variable*>(items[1]));
+    if (m_items[1]->isVariable)
+        foundVariables.push_back(reinterpret_cast<variable*>(m_items[1]));
     else {
-        std::vector<const variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(items[1])->getVariables();
+        std::vector<const variable*> singleParametersVariables = reinterpret_cast<truthFunction*>(m_items[1])->getVariables();
         foundVariables.reserve(singleParametersVariables.size());
         foundVariables.insert(foundVariables.end(), singleParametersVariables.begin(), singleParametersVariables.end());
     }
@@ -45,10 +45,10 @@ std::vector<const variable*> truthFunction::getVariables() const {
 }
 
 const symbol* truthFunction::operator[](const int p_index) const {
-    return items[p_index];
+    return m_items[p_index];
 }
 
 truthFunction::~truthFunction() {
-    delete items[0];
-    delete items[1];
+    delete m_items[0];
+    delete m_items[1];
 }

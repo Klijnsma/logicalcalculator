@@ -4,17 +4,17 @@
 std::string conjunction::getString() const {
     std::string premiseString;
 
-    if (items[0]->isVariable)
-        premiseString = items[0]->getString();
+    if (m_items[0]->isVariable)
+        premiseString = m_items[0]->getString();
     else
-        premiseString = '(' + items[0]->getString() + ')';
+        premiseString = '(' + m_items[0]->getString() + ')';
 
     premiseString += " ∧ ";
 
-    if (items[1]->isVariable)
-        premiseString += items[1]->getString();
+    if (m_items[1]->isVariable)
+        premiseString += m_items[1]->getString();
     else
-        premiseString += '(' + items[1]->getString() + ')';
+        premiseString += '(' + m_items[1]->getString() + ')';
 
     if (!isPositive) {
         premiseString.insert(0, "!(");
@@ -27,22 +27,22 @@ std::string conjunction::getString() const {
 bool conjunction::calculate(const truthTable* p_truthTable, const int row) const {
     bool value1, value2;
 
-    if (items[0]->isVariable) {
+    if (m_items[0]->isVariable) {
         // Get the truth value for the char variables in the given row.
-        value1 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(items[0]), row) == items[0]->isPositive;
+        value1 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(m_items[0]), row) == m_items[0]->isPositive;
     }
     else {
         // Make sure any nested truthFunctions are calculated first.
-        value1 = items[0]->calculate(p_truthTable, row);
+        value1 = m_items[0]->calculate(p_truthTable, row);
     }
 
-    if (items[1]->isVariable) {
+    if (m_items[1]->isVariable) {
         // Get the truth value for the char variables in the given row.
-        value2 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(items[1]), row) == items[1]->isPositive;
+        value2 = p_truthTable->getTruthValue(reinterpret_cast<const variable*>(m_items[1]), row) == m_items[1]->isPositive;
     }
     else {
         // Make sure any nested truthFunctions are calculated first.
-        value2 = items[1]->calculate(p_truthTable, row);
+        value2 = m_items[1]->calculate(p_truthTable, row);
     }
 
     return (value1 && value2) == isPositive;

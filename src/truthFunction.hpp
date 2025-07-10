@@ -16,7 +16,7 @@ public:
     ~truthFunction() override;
 
 protected:
-    std::vector<symbol*> items;
+    std::vector<symbol*> m_items;
 };
 
 class conjunction : public truthFunction {
