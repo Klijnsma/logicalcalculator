@@ -162,7 +162,7 @@ void truthTable::print() const {
         std::string currentPremiseString = m_premises[premise]->getString();
         std::cout << currentPremiseString << " | ";
         const unsigned int currentPremiseTruthFunctions = m_premises[premise]->getTruthFunctionCount();
-        columnSizeDiff[premise] = currentPremiseString.length() - 2 * currentPremiseTruthFunctions + !m_premises[premise]->isPositive - 1;
+        columnSizeDiff[premise] = currentPremiseString.length() - 2 - currentPremiseTruthFunctions + !m_premises[premise]->isPositive;
 
         if (premise > 0) {
             combinedPremisesString += " ∧ ";
