@@ -11,6 +11,8 @@ public:
     bool getTruthValue(const variable* p_variable, const int p_row) const;
     void print() const;
 
+    bool validity;
+
 private:
     static void calculatePremise(const truthTable* p_truthTable, const unsigned int p_premiseNumber);
 
@@ -27,6 +29,4 @@ private:
 
     // Storage for the actual truth table truth values.
     bool* m_table;
-
-    bool validity;
 };

@@ -33,8 +33,14 @@ int main(const int argv, const char** argc) {
     }
 
     if (!formulae->premises.empty() && formulae->conclusion != nullptr) {
-        truthTable wow(formulae->premises, formulae->conclusion);
-        wow.print();
+        truthTable table(formulae->premises, formulae->conclusion);
+        table.print();
+
+        if (table.validity) {
+            std::cout << "Valid\n";
+            return 0;
+        }
+        std::cout << "Invalid\n";
     }
 
     return 0;

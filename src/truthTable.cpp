@@ -116,6 +116,7 @@ truthTable::truthTable(const std::vector<symbol*>& p_premises, const symbol* p_c
         return;
     }
     validity = false;
+    validity = const_cast<const bool&>(validity);
 }
 
 truthTable::~truthTable() {
