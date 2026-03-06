@@ -1,29 +1,6 @@
 #include "truthFunction.hpp"
 #include "truthTable.hpp"
 
-std::string exclusiveDisjunction::getString() const {
-    std::string premiseString;
-
-    if (m_items[0]->isVariable)
-        premiseString = m_items[0]->getString();
-    else
-        premiseString = '(' + m_items[0]->getString() + ')';
-
-    premiseString += " ⊻ ";
-
-    if (m_items[1]->isVariable)
-        premiseString += m_items[1]->getString();
-    else
-        premiseString += '(' + m_items[1]->getString() + ')';
-
-    if (!isPositive) {
-        premiseString.insert(0, "!(");
-        premiseString += ')';
-    }
-
-    return premiseString;
-}
-
 bool exclusiveDisjunction::calculate(const truthTable* p_truthTable, const int row) const {
     bool value1, value2;
 
@@ -47,3 +24,5 @@ bool exclusiveDisjunction::calculate(const truthTable* p_truthTable, const int r
 
     return ((value1 || value2) && !(value1 && value2)) == isPositive;
 }
+
+std::string exclusiveDisjunction::getOperator() const { return " ⊻ "; };

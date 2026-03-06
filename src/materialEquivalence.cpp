@@ -1,29 +1,6 @@
 #include "truthFunction.hpp"
 #include "truthTable.hpp"
 
-std::string materialEquivalence::getString() const {
-    std::string premiseString;
-
-    if (m_items[0]->isVariable)
-        premiseString = m_items[0]->getString();
-    else
-        premiseString = '(' + m_items[0]->getString() + ')';
-
-    premiseString += " ↔ ";
-
-    if (m_items[1]->isVariable)
-        premiseString += m_items[1]->getString();
-    else
-        premiseString += '(' + m_items[1]->getString() + ')';
-
-    if (!isPositive) {
-        premiseString.insert(0, "!(");
-        premiseString += ')';
-    }
-
-    return premiseString;
-}
-
 bool materialEquivalence::calculate(const truthTable* p_truthTable, const int row) const {
     bool value1, value2;
 
@@ -47,3 +24,5 @@ bool materialEquivalence::calculate(const truthTable* p_truthTable, const int ro
 
     return (value1 == value2) == isPositive;
 }
+
+std::string materialEquivalence::getOperator() const { return " ↔ "; }

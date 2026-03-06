@@ -1,2 +1,4 @@
 *kate*
 .idea/
+*.kdev4
+build/

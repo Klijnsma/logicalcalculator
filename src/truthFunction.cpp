@@ -22,6 +22,29 @@ int truthFunction::getTruthFunctionCount() const {
     return truthFunctions;
 }
 
+std::string truthFunction::getString() const {
+    std::string premiseString;
+
+    if (m_items[0]->isVariable)
+        premiseString = m_items[0]->getString();
+    else
+        premiseString = '(' + m_items[0]->getString() + ')';
+
+    premiseString += getOperator();
+
+    if (m_items[1]->isVariable)
+        premiseString += m_items[1]->getString();
+    else
+        premiseString += '(' + m_items[1]->getString() + ')';
+
+    if (!isPositive) {
+        premiseString.insert(0, "!(");
+        premiseString += ')';
+    }
+
+    return premiseString;
+}
+
 std::vector<const variable*> truthFunction::getVariables() const {
     std::vector<const variable*> foundVariables;
 
