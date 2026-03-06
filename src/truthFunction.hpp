@@ -19,7 +19,7 @@ public:
 protected:
     std::vector<symbol*> m_items;
 private:
-    virtual std::string getOperator() const = 0;
+    constexpr virtual std::string getOperator() const = 0;
 };
 
 
@@ -29,7 +29,7 @@ public:
 
     bool calculate(const truthTable* p_truthTable, int row) const override;
 private:
-    std::string getOperator() const override;
+    constexpr std::string getOperator() const override;
 };
 
 class exclusiveDisjunction : public truthFunction {
@@ -38,7 +38,7 @@ public:
 
     bool calculate(const truthTable* p_truthTable, int row) const override;
 private:
-    std::string getOperator() const override;
+    constexpr std::string getOperator() const override;
 };
 
 class inclusiveDisjunction : public truthFunction {
@@ -47,7 +47,7 @@ public:
 
     bool calculate(const truthTable* p_truthTable, int row) const override;
 private:
-    std::string getOperator() const override;
+    constexpr std::string getOperator() const override;
 };
 
 class materialEquivalence : public truthFunction {
@@ -56,7 +56,7 @@ public:
 
     bool calculate(const truthTable* p_truthTable, int row) const override;
 private:
-    std::string getOperator() const override;
+    constexpr std::string getOperator() const override;
 };
 
 class materialImplication : public truthFunction {
@@ -65,5 +65,5 @@ public:
 
     bool calculate(const truthTable* p_truthTable, int row) const override;
 private:
-    std::string getOperator() const override;
+    constexpr std::string getOperator() const override;
 };

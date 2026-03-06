@@ -25,4 +25,4 @@ bool exclusiveDisjunction::calculate(const truthTable* p_truthTable, const int r
     return ((value1 || value2) && !(value1 && value2)) == isPositive;
 }
 
-std::string exclusiveDisjunction::getOperator() const { return " ⊻ "; };
+constexpr std::string exclusiveDisjunction::getOperator() const { return " ⊻ "; };

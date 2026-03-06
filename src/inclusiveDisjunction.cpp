@@ -25,4 +25,4 @@ bool inclusiveDisjunction::calculate(const truthTable* p_truthTable, const int r
     return (value1 || value2) == isPositive;
 }
 
-std::string inclusiveDisjunction::getOperator() const { return " ∨ "; };
+constexpr std::string inclusiveDisjunction::getOperator() const { return " ∨ "; };

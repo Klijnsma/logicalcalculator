@@ -25,4 +25,4 @@ bool materialEquivalence::calculate(const truthTable* p_truthTable, const int ro
     return (value1 == value2) == isPositive;
 }
 
-std::string materialEquivalence::getOperator() const { return " ↔ "; }
+constexpr std::string materialEquivalence::getOperator() const { return " ↔ "; }
